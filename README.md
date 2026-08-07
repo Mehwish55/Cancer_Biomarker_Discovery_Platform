@@ -196,8 +196,29 @@ Significant pathways identified include:
 
 ![KEGG Pathway](figures/KEGG_pathway_TCGA_LUAD.png)
 
-
 ---
+# 📊 Key Results
+
+## Differential Expression Analysis
+
+RNA-seq differential expression analysis was performed using DESeq2 on TCGA-LUAD samples.
+
+The analysis identified significant genes associated with lung adenocarcinoma progression.
+
+### Top Differentially Expressed Biomarkers
+
+| Gene | Regulation | log2 Fold Change |
+|------|------------|------------------|
+| FAM83A | Upregulated | +6.79 |
+| PYCR1 | Upregulated | +3.68 |
+| AFAP1-AS1 | Upregulated | +6.30 |
+| TOP2A | Upregulated | +3.84 |
+| EPAS1 | Downregulated | -2.72 |
+| PECAM1 | Downregulated | -2.32 |
+
+Complete results are available:
+
+`results/Top20_DEG_Biomarkers_TCGA_LUAD.csv`
 
 # 📂 Repository Structure
 Cancer_Biomarker_Discovery_Platform/
