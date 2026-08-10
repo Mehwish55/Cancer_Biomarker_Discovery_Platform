@@ -542,8 +542,9 @@ https://github.com/Mehwish55
 
 This project demonstrates an integrated computational approach to cancer biomarker discovery, combining **statistical genomics, functional biology, network analysis, independent validation, and machine learning**.
 
-<<<<<<< ours
 This project demonstrates the integration of molecular biology, bioinformatics, statistical genomics, and artificial intelligence approaches for cancer biomarker discovery and precision medicine applications.
+
+The current LUAD workflow progresses from genome-wide differential expression to an **evidence-supported shortlist of candidate biomarkers**, providing a foundation for future clinical, multi-omics, and experimental investigations.
 
 # Visual Results
 
@@ -579,11 +580,6 @@ This project demonstrates the integration of molecular biology, bioinformatics, 
 
 ![KEGG Pathway Enrichment](figures/KEGG_pathway_TCGA_LUAD.png)
 
-||||||| base
-This project demonstrates the integration of molecular biology, bioinformatics, statistical genomics, and artificial intelligence approaches for cancer biomarker discovery and precision medicine applications.
-=======
-The current LUAD workflow progresses from genome-wide differential expression to an **evidence-supported shortlist of candidate biomarkers**, providing a foundation for future clinical, multi-omics, and experimental investigations.
->>>>>>> theirs
 # Final Top 15 Biomarker Candidates
 
 The integrated biomarker ranking combines differential expression, validation, ROC/AUC performance, stability analysis, and machine-learning feature importance.
@@ -610,12 +606,16 @@ The integrated biomarker ranking combines differential expression, validation, R
 
 Complete 40-biomarker evidence table:
 
-esults/final/LUAD_final_40_biomarker_evidence_table.csv
+
+esults/final/LUAD_final_40_biomarker_evidence_table.csv
 
 Complete integrated biomarker ranking:
 
-esults/final/LUAD_integrated_biomarker_ranking.csv
+
+esults/final/LUAD_integrated_biomarker_ranking.csv
 
 Top 15 biomarker table:
 
-esults/final/LUAD_final_top15_biomarkers.csv
+
+esults/final/LUAD_final_top15_biomarkers.csv
+
