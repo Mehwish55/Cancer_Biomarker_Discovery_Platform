@@ -389,3 +389,38 @@ https://github.com/Mehwish55
 🚧 Active Research Development
 
 This project demonstrates the integration of molecular biology, bioinformatics, statistical genomics, and artificial intelligence approaches for cancer biomarker discovery and precision medicine applications.
+
+# Visual Results
+
+## Protein-Protein Interaction Network
+
+![TCGA-LUAD Protein-Protein Interaction Network](figures/network/PPI_network_TCGA_LUAD.png)
+
+## Top 20 Hub Genes
+
+![Top 20 Hub Genes](figures/network/Top20_Hub_Genes_TCGA_LUAD.png)
+
+## Biomarker Validation Heatmap
+
+![LUAD Biomarker Validation Heatmap](results/validation/figures/Figure3_Biomarker_Heatmap.png)
+
+## Biomarker ROC Analysis
+
+![LUAD Top 10 ROC Curves](figures/LUAD_Top10_ROC_curves.png)
+
+## Tumor vs Normal Expression
+
+![Tumor Normal Expression](results/validation/figures/Figure4_Tumor_Normal_Expression.png)
+
+## Biomarker Stability
+
+![Biomarker Stability](results/validation/figures/Figure1_Biomarker_Stability.png)
+
+## GO Enrichment
+
+![GO Enrichment](figures/GO_enrichment_TCGA_LUAD.png)
+
+## KEGG Pathway Enrichment
+
+![KEGG Pathway Enrichment](figures/KEGG_pathway_TCGA_LUAD.png)
+
