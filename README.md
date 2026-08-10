@@ -584,3 +584,38 @@ This project demonstrates the integration of molecular biology, bioinformatics, 
 =======
 The current LUAD workflow progresses from genome-wide differential expression to an **evidence-supported shortlist of candidate biomarkers**, providing a foundation for future clinical, multi-omics, and experimental investigations.
 >>>>>>> theirs
+# Final Top 15 Biomarker Candidates
+
+The integrated biomarker ranking combines differential expression, validation, ROC/AUC performance, stability analysis, and machine-learning feature importance.
+
+| Rank | Gene | log2FC | Direction | Validation | AUC | Sensitivity | Specificity | Stability Rank | ML Rank |
+|---:|---|---:|---|---|---:|---:|---:|---:|---:|
+| 1 | **PYCR1** | 6.56 | Up in Tumor | Strongly validated | 0.998 | 0.985 | 1.000 | 3 | 1 |
+| 2 | **FAM83A** | 9.46 | Up in Tumor | Strongly validated | 0.995 | 0.975 | 0.983 | 5 | 1 |
+| 3 | **B3GNT3** | 6.89 | Up in Tumor | Strongly validated | 0.992 | 0.974 | 0.966 | 4 | 13 |
+| 4 | **CRABP2** | 8.22 | Up in Tumor | Strongly validated | 0.990 | 0.981 | 0.949 | 5 | 38 |
+| 5 | **COL11A1** | 9.10 | Up in Tumor | Strongly validated | 0.979 | 0.951 | 0.949 | 12 | 21 |
+| 6 | **ABCA12** | 7.82 | Up in Tumor | Strongly validated | 0.990 | 0.953 | 0.949 | 6 | 18 |
+| 7 | **CYP24A1** | 9.63 | Up in Tumor | Strongly validated | 0.983 | 0.915 | 0.983 | 11 | 30 |
+| 8 | **PPP1R14D** | 8.95 | Up in Tumor | Strongly validated | 0.986 | 0.941 | 0.949 | 9 | 29 |
+| 9 | **MYEOV** | 9.17 | Up in Tumor | Strongly validated | 0.989 | 0.964 | 0.949 | 7 | 40 |
+| 10 | **PITX2** | 11.47 | Up in Tumor | Strongly validated | 0.964 | 0.924 | 1.000 | 17 | 39 |
+| 11 | **TMPRSS11E** | 9.69 | Up in Tumor | Strongly validated | 0.966 | 0.801 | 1.000 | 14 | 25 |
+| 12 | **EEF1A2** | 9.20 | Up in Tumor | Strongly validated | 0.966 | 0.888 | 0.966 | 15 | 15 |
+| 13 | **TRPM8** | 9.59 | Up in Tumor | Strongly validated | 0.977 | 0.913 | 1.000 | 13 | 26 |
+| 14 | **PRAME** | 10.46 | Up in Tumor | Strongly validated | 0.942 | 0.943 | 0.864 | 19 | 35 |
+| 15 | **MMP11** | 6.81 | Up in Tumor | Strongly validated | 0.993 | 0.975 | 0.966 | 11 | 13 |
+
+### Complete Evidence Tables
+
+Complete 40-biomarker evidence table:
+
+esults/final/LUAD_final_40_biomarker_evidence_table.csv
+
+Complete integrated biomarker ranking:
+
+esults/final/LUAD_integrated_biomarker_ranking.csv
+
+Top 15 biomarker table:
+
+esults/final/LUAD_final_top15_biomarkers.csv
