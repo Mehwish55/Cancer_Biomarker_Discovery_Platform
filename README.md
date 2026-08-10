@@ -579,8 +579,6 @@ This project demonstrates the integration of molecular biology, bioinformatics, 
 
 ![KEGG Pathway Enrichment](figures/KEGG_pathway_TCGA_LUAD.png)
 
-||||||| base
 This project demonstrates the integration of molecular biology, bioinformatics, statistical genomics, and artificial intelligence approaches for cancer biomarker discovery and precision medicine applications.
-=======
+
 The current LUAD workflow progresses from genome-wide differential expression to an **evidence-supported shortlist of candidate biomarkers**, providing a foundation for future clinical, multi-omics, and experimental investigations.
->>>>>>> theirs
