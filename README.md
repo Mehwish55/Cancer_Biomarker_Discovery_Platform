@@ -1,54 +1,52 @@
 # 🧬 AI-Powered Cancer Biomarker Discovery Platform
 
-![Python](https://img.shields.io/badge/Python-3.11-blue.svg)
-![R](https://img.shields.io/badge/R-4.3-blue.svg)
-![Bioconductor](https://img.shields.io/badge/Bioconductor-DESeq2-green.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
+An end-to-end computational biology and bioinformatics platform for **identifying, prioritizing, validating, and interpreting candidate cancer biomarkers** using transcriptomic data, statistical genomics, network biology, functional enrichment, and machine-learning-assisted analysis.
 
-An end-to-end computational biology platform for identifying and prioritizing cancer biomarkers using transcriptomic data, statistical genomics, functional enrichment analysis, and machine learning approaches.
+The current study focuses on **Lung Adenocarcinoma (LUAD)** using publicly available transcriptomic data.
 
 ---
 
-# 📖 Project Overview
+## 📖 Project Overview
 
-Cancer biomarker discovery is essential for understanding disease mechanisms, improving diagnosis, developing targeted therapies, and supporting precision medicine.
+Cancer biomarker discovery is important for understanding disease biology, identifying diagnostic and prognostic candidates, and supporting precision medicine.
 
-This project develops a reproducible bioinformatics workflow using publicly available cancer genomic datasets to identify potential molecular biomarkers associated with Lung Adenocarcinoma (LUAD).
+This project develops a reproducible computational workflow that integrates:
 
-The platform integrates:
+* RNA-seq gene expression analysis
+* Differential gene expression analysis
+* Functional enrichment analysis
+* Protein-protein interaction analysis
+* Hub-gene identification
+* Biomarker prioritization
+* Independent validation
+* ROC/AUC analysis
+* Machine-learning-assisted biomarker evaluation
+* Integrated evidence-based biomarker ranking
 
-- RNA-seq data analysis
-- Differential gene expression analysis
-- Functional pathway interpretation
-- Biomarker prioritization
-- Machine learning-based prediction
-- Reproducible computational workflows
+The goal is to move from a large set of differentially expressed genes toward a smaller set of **high-confidence biomarker candidates supported by multiple independent lines of evidence**.
 
 ---
 
 # 🔬 Research Question
 
-**Can computational analysis of transcriptomic data identify potential molecular biomarkers and biological pathways associated with Lung Adenocarcinoma progression?**
+**Can an integrated computational biology and machine-learning workflow identify robust molecular biomarkers associated with Lung Adenocarcinoma?**
 
 ---
 
 # 🎯 Objectives
 
-The main objectives of this project are:
+The project aims to:
 
-✓ Identify significantly differentially expressed genes (DEGs)
-
-✓ Discover potential cancer biomarkers
-
-✓ Understand biological pathways involved in tumor progression
-
-✓ Perform functional enrichment analysis
-
-✓ Develop machine learning models for biomarker classification
-
-✓ Create a reproducible research workflow
-
-✓ Build an interactive AI-assisted biomarker discovery platform
+* Identify significantly differentially expressed genes between LUAD tumor and normal samples
+* Identify candidate cancer biomarkers
+* Characterize biological processes and pathways associated with LUAD
+* Investigate protein-protein interaction networks
+* Identify highly connected hub genes
+* Prioritize biomarkers using multiple evidence sources
+* Validate candidate biomarkers using independent expression data
+* Evaluate biomarker discrimination using ROC/AUC analysis
+* Apply machine-learning approaches to biomarker evaluation
+* Generate a reproducible and transparent research workflow
 
 ---
 
@@ -58,54 +56,74 @@ The main objectives of this project are:
 
 **Lung Adenocarcinoma (LUAD)**
 
-## Data Source
+## Primary Data
 
-- The Cancer Genome Atlas (TCGA)
-- Publicly available transcriptomic datasets
+**The Cancer Genome Atlas (TCGA-LUAD)**
 
-## Analysis Type
+## Validation Data
 
-RNA-seq gene expression analysis comparing:
+An independent LUAD validation dataset was used to evaluate the robustness of the prioritized biomarker candidates.
 
-- Tumor samples
-- Normal tissue samples
+## Analysis
+
+Gene-expression profiles were analyzed to compare:
+
+* LUAD tumor samples
+* Normal lung tissue samples
 
 ---
 
 # 🔬 Research Workflow
+
+```text
 Public Cancer Genomic Data
-│
-▼
-Data Import & Processing
-│
-▼
+          │
+          ▼
+Data Import & Quality Control
+          │
+          ▼
 RNA-seq Expression Analysis
-│
-▼
+          │
+          ▼
 Differential Expression Analysis
-(DESeq2)
-│
-▼
-Candidate Biomarker Identification
-│
-▼
-Functional Enrichment
-(GO / KEGG)
-│
-▼
-Pathway Interpretation
-│
-▼
-Protein Interaction Network
-│
-▼
-Machine Learning Biomarker Selection
-│
-▼
-Validation & Prediction
-│
-▼
-AI-powered Biomarker Platform
+              (DESeq2)
+          │
+          ▼
+Candidate Gene Identification
+          │
+          ├───────────────┐
+          ▼               ▼
+Functional Enrichment   PPI Network
+(GO / KEGG)             Analysis
+          │               │
+          │               ▼
+          │           Hub Genes
+          │
+          └───────┬───────┘
+                  ▼
+        Biomarker Prioritization
+                  │
+                  ▼
+       Independent Validation
+                  │
+          ┌───────┴────────┐
+          ▼                ▼
+      Expression        ROC / AUC
+      Validation        Evaluation
+          │                │
+          └───────┬────────┘
+                  ▼
+       Machine-Learning Evaluation
+                  │
+                  ▼
+       Integrated Evidence Ranking
+                  │
+                  ▼
+       Final Biomarker Candidates
+                  │
+                  ▼
+       Biological Interpretation
+```
 
 ---
 
@@ -113,261 +131,397 @@ AI-powered Biomarker Platform
 
 ## 1. Differential Gene Expression Analysis
 
-Tool:
+Differential expression analysis was performed using:
 
-- DESeq2
-- Bioconductor
-- R
+* R
+* Bioconductor
+* DESeq2
 
-Analysis performed:
+The analysis compared LUAD tumor and normal expression profiles and generated genome-wide differential expression results.
 
-- Statistical comparison of tumor vs normal expression profiles
-- Identification of significantly altered genes
-- Ranking based on:
+Generated outputs include:
 
-  - log2 fold change
-  - adjusted p-value
-  - statistical significance
+* Complete DESeq2 results
+* Upregulated genes
+* Downregulated genes
+* Ranked DEGs
+* Candidate biomarker lists
+* Volcano plot
 
+Important result files:
 
-### Example identified candidate genes:
-
-| Gene | Regulation |
-|------|------------|
-| FAM83A | Upregulated |
-| PYCR1 | Upregulated |
-| AFAP1-AS1 | Upregulated |
-| TOP2A | Upregulated |
-| IQGAP3 | Upregulated |
-| PECAM1 | Downregulated |
-| RGCC | Downregulated |
-| S1PR1 | Downregulated |
-
+```text
+results/DESeq2_all_genes_LUAD.csv
+results/DEG_LUAD_primary_vs_normal.csv
+results/Upregulated_DEGs_LUAD.csv
+results/Downregulated_DEGs_LUAD.csv
+results/LUAD_biomarker_ranked.csv
+results/biomarker_candidates_LUAD.csv
+```
 
 ---
 
-# 📊 Differential Expression Visualization
+# 🧪 2. Functional Enrichment Analysis
 
-Generated:
+Functional interpretation was performed using:
 
-- Volcano plot
-- Ranked DEG tables
-- Candidate biomarker lists
+* Gene Ontology (GO)
+* KEGG pathway analysis
+* clusterProfiler
+* org.Hs.eg.db
 
+GO enrichment was evaluated across:
 
-![Volcano Plot](figures/Volcano_plot_TCGA_LUAD.png)
+* Biological Process
+* Cellular Component
+* Molecular Function
 
+Generated outputs include:
 
----
+```text
+results/GO_Biological_Process_LUAD.csv
+results/GO_Cellular_Component_LUAD.csv
+results/GO_Molecular_Function_LUAD.csv
+results/KEGG_LUAD_enrichment.csv
+```
 
-# 🧬 Functional Enrichment Analysis
-
-Performed biological interpretation using:
-
-- clusterProfiler
-- Gene Ontology (GO)
-- KEGG pathway analysis
-
-
-## GO Enrichment Results
-
-Major enriched biological processes:
-
-- Extracellular matrix organization
-- Cell-cell adhesion
-- Immune-related processes
-- Cellular signaling regulation
-
-
-![GO Enrichment](figures/GO_enrichment_TCGA_LUAD.png)
-
+Corresponding visualizations include GO and KEGG enrichment plots.
 
 ---
 
-# 🧪 KEGG Pathway Analysis
+# 🕸️ 3. Protein-Protein Interaction Network Analysis
 
-Significant pathways identified include:
+Protein interaction analysis was performed to investigate relationships among candidate genes and identify highly connected genes within the LUAD biomarker network.
 
-- Neuroactive ligand-receptor interaction
-- Hormone signaling pathways
-- Immune-related pathways
-- Disease-associated molecular pathways
+The project includes:
 
+* PPI input gene lists
+* STRING interaction data
+* PPI network analysis
+* Hub-gene identification
+* Hub-gene visualization
 
-![KEGG Pathway](figures/KEGG_pathway_TCGA_LUAD.png)
+Key outputs include:
+
+```text
+results/network/
+figures/network/
+```
+
+The network analysis provides an additional biological layer for prioritizing candidate biomarkers beyond differential expression alone.
 
 ---
-# 📊 Key Results
 
-## Differential Expression Analysis
+# 🧬 4. Biomarker Prioritization
 
-RNA-seq differential expression analysis was performed using DESeq2 on TCGA-LUAD samples.
+Candidate biomarkers were prioritized using multiple evidence sources, including:
 
-The analysis identified significant genes associated with lung adenocarcinoma progression.
+* Differential expression
+* Statistical significance
+* Expression magnitude
+* Network connectivity
+* Independent validation
+* ROC/AUC performance
+* Biomarker stability
+* Machine-learning evaluation
 
-### Top Differentially Expressed Biomarkers
+This integrated approach reduces dependence on a single statistical criterion.
 
-| Gene | Regulation | log2 Fold Change |
-|------|------------|------------------|
-| FAM83A | Upregulated | +6.79 |
-| PYCR1 | Upregulated | +3.68 |
-| AFAP1-AS1 | Upregulated | +6.30 |
-| TOP2A | Upregulated | +3.84 |
-| EPAS1 | Downregulated | -2.72 |
-| PECAM1 | Downregulated | -2.32 |
+---
 
-Complete results are available:
+# 🔎 5. Independent Biomarker Validation
 
-`results/Top20_DEG_Biomarkers_TCGA_LUAD.csv`
+A dedicated validation workflow was developed to test the robustness of the prioritized LUAD biomarkers.
+
+Validation outputs include:
+
+```text
+results/validation/LUAD_Top40_DESeq2_validation.csv
+results/validation/LUAD_Top40_validation_clean.csv
+results/validation/LUAD_Top40_validation_expression.csv
+results/validation/LUAD_Top40_validation_merged.csv
+results/validation/LUAD_Top40_validation_ranked.csv
+results/validation/LUAD_Top40_validation_statistics.csv
+results/validation/LUAD_validated_biomarkers_FDR05.csv
+```
+
+Additional validation analyses include:
+
+* Expression consistency
+* Statistical significance
+* FDR-based filtering
+* Biomarker stability
+* Tumor-versus-normal expression comparison
+
+---
+
+# 📈 6. ROC / AUC Biomarker Evaluation
+
+Receiver Operating Characteristic (ROC) analysis was performed to evaluate the ability of candidate biomarkers to distinguish LUAD tumor samples from normal samples.
+
+Key output:
+
+```text
+results/validation/LUAD_Top40_ROC_AUC_results.csv
+```
+
+Visualization:
+
+```text
+figures/LUAD_Top10_ROC_curves.png
+```
+
+ROC/AUC analysis provides an additional measure of the potential diagnostic discrimination of individual biomarkers.
+
+---
+
+# 🤖 7. Machine Learning Evaluation
+
+Machine-learning analyses were incorporated to evaluate biomarker stability and predictive performance.
+
+The validation workflow includes:
+
+* Random Forest feature importance
+* Model comparison
+* Patient-grouped evaluation
+* Grouped cross-validation
+* Biomarker stability analysis
+
+Important outputs include:
+
+```text
+results/validation/ml/RandomForest_feature_importance.csv
+results/validation/ml/biomarker_stability.csv
+results/validation/ml/model_comparison.csv
+results/validation/ml/patient_grouped_ml_comparison.csv
+results/validation/ml/clean_patient_grouped_ml_comparison.csv
+results/validation/ml/clean_groupkfold_ml_comparison.csv
+```
+
+Patient-grouped validation was incorporated to reduce the risk of information leakage and provide a more rigorous assessment of biomarker performance.
+
+---
+
+# 🏆 8. Final Integrated Biomarker Ranking
+
+The project combines multiple evidence layers to generate an integrated biomarker ranking.
+
+The final evidence table contains the prioritized biomarker candidates together with supporting evidence from the computational analyses.
+
+Important final outputs:
+
+```text
+results/final/LUAD_final_40_biomarker_evidence_table.csv
+results/final/LUAD_final_top15_biomarkers.csv
+results/final/LUAD_integrated_biomarker_ranking.csv
+```
+
+The **final 40-gene evidence table** is intended to provide a transparent overview of biomarker evidence.
+
+The **top-15 biomarker set** provides a more focused shortlist for downstream biological interpretation and future experimental validation.
+
+---
+
+# 📊 Key Visualizations
+
+The repository contains visualizations covering the major stages of the analysis.
+
+### Differential Expression
+
+```text
+figures/Volcano_plot_TCGA_LUAD.png
+figures/LUAD_Top15_biomarker_heatmap.png
+```
+
+### Functional Enrichment
+
+```text
+figures/GO_enrichment_TCGA_LUAD.png
+figures/KEGG_pathway_TCGA_LUAD.png
+```
+
+### Network Biology
+
+```text
+figures/network/PPI_network_TCGA_LUAD.png
+figures/network/Top20_Hub_Genes_TCGA_LUAD.png
+```
+
+### Biomarker Validation
+
+```text
+figures/LUAD_Top10_ROC_curves.png
+results/validation/figures/Figure1_Biomarker_Stability.png
+results/validation/figures/Figure2_Biomarker_AUC.png
+results/validation/figures/Figure3_Biomarker_Heatmap.png
+results/validation/figures/Figure4_Tumor_Normal_Expression.png
+```
+
+---
 
 # 📂 Repository Structure
-Cancer_Biomarker_Discovery_Platform/
 
+```text
+Cancer_Biomarker_Discovery_Platform/
 │
 ├── data/
-│ ├── raw/
-│ ├── processed/
-│ └── metadata/
+│   ├── raw/
+│   ├── processed/
+│   ├── metadata/
+│   └── validation/
 │
 ├── notebooks/
-│ ├── 01_TCGA_LUAD_Data_Exploration.ipynb
-│ ├── 02_data_import.ipynb
-│ └── 02_Functional_Enrichment.ipynb
+│   ├── 01_TCGA_LUAD_Data_Exploration.ipynb
+│   ├── 02_data_import.ipynb
+│   ├── 02_Functional_Enrichment.ipynb
+│   ├── 03_PPI_Network_Analysis.ipynb
+│   ├── 04_Hub_Gene_Analysis.ipynb
+│   └── 05_Machine_Learning_Biomarker_Model.ipynb
 │
 ├── figures/
-│ ├── Volcano_plot_TCGA_LUAD.png
-│ ├── GO_enrichment_TCGA_LUAD.png
-│ └── KEGG_pathway_TCGA_LUAD.png
+│   ├── enrichment/
+│   └── network/
 │
 ├── results/
-│ ├── Top_candidate_biomarkers_TCGA_LUAD.csv
-│ └── enrichment/
-│
-├── docs/
-│ └── TCGA_LUAD_Biomarker_Report.md
+│   ├── enrichment/
+│   ├── final/
+│   ├── ml/
+│   ├── network/
+│   └── validation/
 │
 ├── scripts/
+│   ├── run_LUAD_Top40_DESeq2.R
+│   ├── create_final_biomarker_table.R
+│   ├── create_Top40_validation_ranking.R
+│   ├── create_LUAD_Top15_heatmap.R
+│   ├── LUAD_Top40_ROC_analysis.R
+│   ├── extract_validation_biomarkers.py
+│   └── check_validation.py
 │
+├── docs/
+│   └── TCGA_LUAD_Biomarker_Report.md
+│
+├── references/
+│
+├── LICENSE
 └── README.md
+```
 
 ---
 
-# 🛠 Technologies Used
+# 🛠️ Technologies Used
 
 ## Programming
 
-- R
-- Python
-- Bash
-
+* R
+* Python
+* Bash
 
 ## Bioinformatics
 
-- DESeq2
-- Bioconductor
-- clusterProfiler
-- org.Hs.eg.db
-- KEGG
-- Gene Ontology
+* DESeq2
+* Bioconductor
+* clusterProfiler
+* org.Hs.eg.db
+* Gene Ontology
+* KEGG
+* STRING/PPI analysis
 
+## Data Science & Machine Learning
 
-## Data Science
-
-- Pandas
-- NumPy
-- Scikit-learn
-- Machine Learning
-
+* Pandas
+* NumPy
+* Scikit-learn
+* Random Forest
+* ROC/AUC analysis
+* Cross-validation
 
 ## Visualization
 
-- ggplot2
-- matplotlib
-- Plotly
-
+* ggplot2
+* matplotlib
+* Plotly
+* pheatmap
 
 ## Reproducibility
 
-- Git
-- GitHub
-- Conda
-- Jupyter Notebook
+* Git
+* GitHub
+* Conda
+* WSL2
+* Jupyter Notebook
 
 ---
 
-# 📈 Project Results
+# 📈 Current Project Status
 
-The first phase successfully generated:
-
-✓ Differentially expressed gene profile
-
-✓ Candidate cancer biomarkers
-
-✓ Biological pathway interpretation
-
-✓ GO enrichment results
-
-✓ KEGG pathway analysis
-
-✓ Publication-quality figures
-
-✓ Reproducible computational environment
-
-
----
-
-# 🚀 Next Development Phase
-
-## Machine Learning Biomarker Prediction
-
-Planned approaches:
-
-- Random Forest classifier
-- Support Vector Machine
-- XGBoost
-- Feature selection
-
-
-Goals:
-
-- Identify strongest biomarker combinations
-- Build predictive models
-- Evaluate model performance
-
-
----
-
-# 🔬 Future Improvements
-
-Future development includes:
-
-- Protein-protein interaction networks
-- Survival analysis using clinical data
-- External dataset validation
-- Single-cell RNA-seq integration
-- Multi-omics analysis
-- Explainable AI (XAI)
-- Drug target prioritization
-- Interactive Streamlit dashboard
-
-
----
-
-# 📅 Development Roadmap
-
-| Phase | Status |
-|---|---|
-| Project setup | ✅ Completed |
-| Data import and processing | ✅ Completed |
+| Analysis Component               | Status      |
+| -------------------------------- | ----------- |
+| Project setup                    | ✅ Completed |
+| Data import and processing       | ✅ Completed |
 | Differential expression analysis | ✅ Completed |
-| GO enrichment | ✅ Completed |
-| KEGG pathway analysis | ✅ Completed |
-| Biomarker prioritization | ✅ Completed |
-| PPI network analysis | 🔄 Next |
-| Machine learning models | 🔄 Next |
-| Validation | 🔄 Next |
-| AI dashboard | 🔄 Future |
+| DEG ranking                      | ✅ Completed |
+| GO enrichment                    | ✅ Completed |
+| KEGG enrichment                  | ✅ Completed |
+| PPI network analysis             | ✅ Completed |
+| Hub-gene analysis                | ✅ Completed |
+| Biomarker prioritization         | ✅ Completed |
+| Independent validation           | ✅ Completed |
+| ROC/AUC evaluation               | ✅ Completed |
+| Biomarker stability analysis     | ✅ Completed |
+| Machine-learning evaluation      | ✅ Completed |
+| Integrated biomarker ranking     | ✅ Completed |
+| Final 40-gene evidence table     | ✅ Completed |
+| Top-15 biomarker shortlist       | ✅ Completed |
+| Reproducible GitHub workflow     | ✅ Completed |
+| Experimental validation          | 🔄 Future   |
+| Clinical survival analysis       | 🔄 Future   |
+| Multi-omics integration          | 🔄 Future   |
+| Interactive AI dashboard         | 🔄 Future   |
 
+---
+
+# 🚀 Future Development
+
+The next development stages can extend the platform toward:
+
+### Clinical Validation
+
+* Overall survival analysis
+* Disease-free survival analysis
+* Clinical stage association
+* Multivariate Cox regression
+
+### External Validation
+
+* Additional independent LUAD cohorts
+* Cross-dataset biomarker validation
+* Meta-analysis
+
+### Multi-Omics Integration
+
+* Mutation data
+* Copy-number variation
+* DNA methylation
+* Proteomics
+* Single-cell RNA-seq
+
+### Explainable AI
+
+* SHAP analysis
+* Feature importance interpretation
+* Explainable biomarker prediction
+
+### Translational Research
+
+* Drug-target prioritization
+* Drug repurposing
+* Molecular mechanism analysis
+* Experimental validation planning
+
+### Interactive Platform
+
+Future development may include an interactive **AI-assisted biomarker discovery dashboard** for exploring candidate genes, expression patterns, pathway associations, network relationships, and predictive performance.
 
 ---
 
@@ -378,14 +532,14 @@ Future development includes:
 Bioinformatics | Computational Biology | Cancer Genomics | Artificial Intelligence
 
 GitHub:
-
 https://github.com/Mehwish55
-
 
 ---
 
 # ⭐ Project Status
 
-🚧 Active Research Development
+**Active Research Development**
 
-This project demonstrates the integration of molecular biology, bioinformatics, statistical genomics, and artificial intelligence approaches for cancer biomarker discovery and precision medicine applications.
+This project demonstrates an integrated computational approach to cancer biomarker discovery, combining **statistical genomics, functional biology, network analysis, independent validation, and machine learning**.
+
+The current LUAD workflow progresses from genome-wide differential expression to an **evidence-supported shortlist of candidate biomarkers**, providing a foundation for future clinical, multi-omics, and experimental investigations.
