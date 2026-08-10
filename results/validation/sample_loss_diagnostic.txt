@@ -1,0 +1,7 @@
+TCGA-LUAD SAMPLE LOSS DIAGNOSTIC
+============================================================
+
+Original samples: 588
+Pivot samples: 588
+Lost samples: 0
+
