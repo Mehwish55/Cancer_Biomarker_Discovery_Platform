@@ -5,6 +5,54 @@ An end-to-end computational biology and bioinformatics platform for **identifyin
 The current study focuses on **Lung Adenocarcinoma (LUAD)** using publicly available transcriptomic data.
 
 ---
+## 🚀 Live Demo — Dashboard V2
+
+The **Cancer Biomarker Discovery Platform V2** is now publicly deployed as an interactive Streamlit application.
+
+👉 **[Launch the Live Dashboard](https://cancerbiomarkerdiscoveryplatform.streamlit.app/)**
+
+### Platform capabilities
+
+* 🧬 **Biomarker Explorer** — explore and rank candidate biomarkers
+* 📊 **Differential Expression** — investigate LUAD gene-expression changes
+* 🏆 **Integrated Biomarker Ranking** — combine multiple evidence sources
+* 🤖 **Machine Learning** — evaluate biomarker prediction models
+* 📈 **ROC Validation** — assess biomarker discriminatory performance
+* 🔬 **Biomarker Stability** — evaluate ranking/stability across analyses
+* 🧪 **Pathway Analysis** — explore GO Biological Process, Cellular Component, and Molecular Function
+* 🛤️ **KEGG Pathway Analysis** — investigate enriched biological pathways
+* 🔎 **Evidence Explorer** — integrate evidence for individual biomarkers
+* 🤖 **AI Assistant** — generate responses grounded in the platform's validated biomarker evidence
+
+### Validation
+
+The V2 application includes automated tests covering:
+
+* Dataset loading
+* KEGG dataset integration
+* Biomarker evidence retrieval
+* Evidence existence validation
+* AI grounding and source generation
+
+**Current test status: 8/8 tests passing ✅**
+
+### Technology Stack
+
+**Bioinformatics:** R, DESeq2, pathway enrichment, biomarker validation
+**AI/ML:** Python, scikit-learn, evidence-grounded AI workflows
+**Data Analysis:** Python, pandas
+**Visualization:** Plotly, Streamlit
+**Deployment:** Streamlit Community Cloud
+**Version Control:** Git, GitHub
+
+### Project
+
+**Cancer type:** Lung Adenocarcinoma (LUAD)
+**Primary dataset:** TCGA-LUAD
+**Platform version:** V2.0
+
+> This platform presents computationally derived biomarker evidence and is intended for research and exploratory purposes. It does not provide clinical diagnostic recommendations.
+
 
 ## 📖 Project Overview
 
