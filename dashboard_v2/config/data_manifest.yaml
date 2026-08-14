@@ -1,0 +1,95 @@
+project:
+  name: "LUAD Cancer Biomarker AI Platform"
+  version: "2.0"
+  organism: "Homo sapiens"
+  cancer_type: "Lung Adenocarcinoma"
+  primary_dataset: "TCGA-LUAD"
+
+datasets:
+
+  deg:
+    path: "results/DEG_LUAD_primary_vs_normal_clean.csv"
+    join_key: "gene_name"
+    stage: "differential_expression"
+    gene_universe: "all_significant_DEGs"
+    expected_rows: 5337
+
+  top15:
+    path: "results/final/LUAD_final_top15_biomarkers.csv"
+    join_key: "gene_name"
+    stage: "final_biomarkers"
+    gene_universe: "validated_40"
+    expected_rows: 15
+
+  integrated_ranking:
+    path: "results/final/LUAD_integrated_biomarker_ranking.csv"
+    join_key: "gene_name"
+    stage: "integrated_ranking"
+    gene_universe: "validated_40"
+    expected_rows: 40
+
+  model_comparison:
+    path: "results/validation/ml/model_comparison.csv"
+    join_key: null
+    stage: "machine_learning"
+    gene_universe: "validated_40"
+    expected_rows: 2
+
+  rf_importance:
+    path: "results/validation/ml/RandomForest_feature_importance.csv"
+    join_key: "gene_name"
+    stage: "machine_learning"
+    gene_universe: "validated_40"
+    expected_rows: 40
+
+  stability:
+    path: "results/validation/ml/biomarker_stability.csv"
+    join_key: "gene_name"
+    stage: "stability"
+    gene_universe: "validated_40"
+    expected_rows: 40
+
+  roc_results:
+    path: "results/validation/LUAD_Top40_ROC_AUC_results.csv"
+    join_key: "gene_name"
+    stage: "roc_validation"
+    gene_universe: "validated_40"
+    expected_rows: 40
+
+  validation_ranking:
+    path: "results/validation/LUAD_Top40_final_validation_ranking.csv"
+    join_key: "gene_name"
+    stage: "validation"
+    gene_universe: "validated_40"
+    expected_rows: 40
+
+  validation_stats:
+    path: "results/validation/LUAD_Top40_validation_statistics.csv"
+    join_key: "gene_name"
+    stage: "validation"
+    gene_universe: "validated_40"
+    expected_rows: 40
+
+  go_bp:
+    path: "results/validation/enrichment/GO_Biological_Process.csv"
+    join_key: null
+    stage: "pathway_enrichment"
+    gene_universe: "validated_40"
+
+  go_cc:
+    path: "results/validation/enrichment/GO_Cellular_Component.csv"
+    join_key: null
+    stage: "pathway_enrichment"
+    gene_universe: "validated_40"
+
+  go_mf:
+    path: "results/validation/enrichment/GO_Molecular_Function.csv"
+    join_key: null
+    stage: "pathway_enrichment"
+    gene_universe: "validated_40"
+
+  kegg:
+    path: "results/validation/enrichment/KEGG_Pathways.csv"
+    join_key: null
+    stage: "pathway_enrichment"
+    gene_universe: "validated_40"

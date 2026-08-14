@@ -216,3 +216,17 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# Development / inspection files
+.agents/
+v2_inspection/
+Cancer_Biomarker_V2_Inspection.zip
+
+# Legacy dashboard
+dashboard/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Backup files
+*.empty_backup.csv
