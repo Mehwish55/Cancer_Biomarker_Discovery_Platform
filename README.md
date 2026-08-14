@@ -522,6 +522,17 @@ Cancer_Biomarker_Discovery_Platform/
 | Final 40-gene evidence table     | ✅ Completed |
 | Top-15 biomarker shortlist       | ✅ Completed |
 | Reproducible GitHub workflow     | ✅ Completed |
+
+Dashboard V2 deployed
+✅ Interactive biomarker explorer
+✅ Evidence Explorer
+✅ AI Assistant with evidence grounding
+✅ KEGG integration
+✅ 8 automated tests passing
+🔄 Clinical survival analysis
+🔄 Multi-omics
+🔄 SHAP / explainable AI
+🔄 Experimental validation
 | Experimental validation          | 🔄 Future   |
 | Clinical survival analysis       | 🔄 Future   |
 | Multi-omics integration          | 🔄 Future   |
