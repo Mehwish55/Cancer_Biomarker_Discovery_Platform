@@ -17,7 +17,7 @@ from views.roc_validation import show_roc_validation
 # ==================================================
 
 st.set_page_config(
-    page_title="LUAD Cancer Biomarker AI — V2",
+    page_title="OncoNexa — AI-Powered Pan-Cancer Biomarker Discovery Platform",
     page_icon="🧬",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -92,7 +92,7 @@ kegg = data.get("kegg")
 # SIDEBAR
 # ==================================================
 
-st.sidebar.title("🧬 LUAD Biomarker AI")
+st.sidebar.title("🧬 OncoNexa")
 
 st.sidebar.caption("Version 2.0")
 
@@ -121,11 +121,11 @@ st.sidebar.markdown(
     """
     **Project**
 
-    TCGA-LUAD
+    OncoNexa
 
     **Disease**
 
-    Lung Adenocarcinoma
+    Cancer Biomarker Discovery
 
     **Analysis**
 
@@ -156,11 +156,11 @@ def metric_value(df, column, default=0):
 
 if section == "🏠 Overview":
 
-    st.title("🧬 LUAD Cancer Biomarker AI Platform")
+    st.title("🧬 OncoNexa — AI-Powered Pan-Cancer Biomarker Discovery Platform")
 
     st.markdown(
         """
-        ### Lung Adenocarcinoma Biomarker Discovery
+        ### AI-Powered Cancer Biomarker Discovery
 
         An evidence-driven platform integrating differential expression,
         independent validation, ROC/AUC analysis, machine learning,
@@ -445,7 +445,7 @@ elif section == "📥 Downloads":
     st.markdown(
         """
         Download the canonical datasets used by the
-        LUAD Cancer Biomarker AI Platform.
+        OncoNexa — AI-Powered Cancer Biomarker Discovery Platform.
         """
     )
     st.subheader("📋 Research Summary")
@@ -453,7 +453,7 @@ elif section == "📥 Downloads":
     st.markdown(
         """
         This section provides the canonical V2 research outputs.
-        All datasets are derived from the validated LUAD biomarker
+        The current demonstration uses the validated LUAD biomarker
         analysis pipeline and are provided for further analysis,
         reproducibility, and reporting.
         """
@@ -540,7 +540,7 @@ elif section == "📥 Downloads":
 st.sidebar.divider()
 
 st.sidebar.caption(
-    "LUAD Cancer Biomarker AI Platform"
+    "OncoNexa — AI-Powered Pan-Cancer Biomarker Discovery Platform"
 )
 
 st.sidebar.caption(
