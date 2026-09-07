@@ -156,33 +156,181 @@ def metric_value(df, column, default=0):
 
 if section == "🏠 Overview":
 
-    st.title("🧬 OncoNexa — AI-Powered Pan-Cancer Biomarker Discovery Platform")
+    st.title("🧬 OncoNexa")
 
     st.markdown(
         """
-        ### AI-Powered Cancer Biomarker Discovery
+        ## AI-Powered Cancer Biomarker Discovery
 
-        An evidence-driven platform integrating differential expression,
-        independent validation, ROC/AUC analysis, machine learning,
-        biomarker stability, and pathway evidence.
+        **From molecular data to evidence-supported biomarker candidates.**
+
+        OncoNexa integrates statistical analysis, machine learning,
+        validation, biomarker stability, and functional biology into
+        one streamlined research workflow.
         """
     )
 
     st.divider()
 
+    st.subheader("🚀 What OncoNexa Does")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown(
+            """
+            ### 🔬 Discover
+            Identify and prioritize candidate cancer biomarkers
+            from molecular and differential-expression data.
+            """
+        )
+
+    with col2:
+        st.markdown(
+            """
+            ### 🤖 Validate
+            Combine statistical validation, ROC/AUC analysis,
+            machine learning, and biomarker stability.
+            """
+        )
+
+    with col3:
+        st.markdown(
+            """
+            ### 🧬 Interpret
+            Connect candidate biomarkers with biological processes,
+            pathways, and supporting evidence.
+            """
+        )
+
+    st.divider()
+
+    st.subheader("⚙️ Integrated Discovery Workflow")
+
+    workflow = [
+        ("01", "Data Input", "Molecular / expression data"),
+        ("02", "Differential Expression", "Identify significant candidates"),
+        ("03", "Candidate Discovery", "Prioritize biomarker candidates"),
+        ("04", "Validation", "ROC/AUC and independent evidence"),
+        ("05", "Machine Learning", "Feature importance and prediction"),
+        ("06", "Stability", "Assess reproducibility across folds"),
+        ("07", "Functional Biology", "Pathways and biological interpretation"),
+        ("08", "Integrated Ranking", "Generate a prioritized shortlist"),
+    ]
+
+    st.markdown(
+        """
+        <style>
+        .workflow-card {
+            border: 1px solid rgba(128, 128, 128, 0.35);
+            border-radius: 12px;
+            padding: 18px;
+            min-height: 145px;
+            margin-bottom: 18px;
+            background: rgba(128, 128, 128, 0.06);
+        }
+
+        .workflow-number {
+            font-size: 0.85rem;
+            font-weight: 700;
+            opacity: 0.75;
+            margin-bottom: 8px;
+        }
+
+        .workflow-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            min-height: 48px;
+        }
+
+        .workflow-description {
+            font-size: 0.88rem;
+            line-height: 1.45;
+            opacity: 0.8;
+        }
+
+        .workflow-arrow {
+            text-align: center;
+            font-size: 1.4rem;
+            opacity: 0.6;
+            padding-top: 45px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # First workflow row
+    cols = st.columns([1, 0.12, 1, 0.12, 1, 0.12, 1])
+
+    for i, (number, title, description) in enumerate(workflow[:4]):
+        card_col = cols[i * 2]
+
+        with card_col:
+            st.markdown(
+                f"""
+                <div class="workflow-card">
+                    <div class="workflow-number">{number}</div>
+                    <div class="workflow-title">{title}</div>
+                    <div class="workflow-description">{description}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        if i < 3:
+            with cols[i * 2 + 1]:
+                st.markdown(
+                    '<div class="workflow-arrow">→</div>',
+                    unsafe_allow_html=True,
+                )
+
+    # Second workflow row
+    cols = st.columns([1, 0.12, 1, 0.12, 1, 0.12, 1])
+
+    for i, (number, title, description) in enumerate(workflow[4:]):
+        card_col = cols[i * 2]
+
+        with card_col:
+            st.markdown(
+                f"""
+                <div class="workflow-card">
+                    <div class="workflow-number">{number}</div>
+                    <div class="workflow-title">{title}</div>
+                    <div class="workflow-description">{description}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        if i < 3:
+            with cols[i * 2 + 1]:
+                st.markdown(
+                    '<div class="workflow-arrow">→</div>',
+                    unsafe_allow_html=True,
+                )
+
+    st.divider()
+
+    st.subheader("📊 Current Demonstration")
+
+    st.markdown(
+        """
+        ### Lung Adenocarcinoma — TCGA-LUAD
+
+        The current OncoNexa demonstration uses a validated
+        **lung adenocarcinoma (LUAD)** biomarker analysis.
+
+        This represents the first disease-specific implementation
+        of the platform. The architecture is designed to support
+        expansion to additional cancer types.
+        """
+    )
+
     n_degs = len(deg) if deg is not None else 0
-
-    n_candidates = (
-        len(ranking)
-        if ranking is not None
-        else 0
-    )
-
-    n_top = (
-        len(top15)
-        if top15 is not None
-        else 0
-    )
+    n_candidates = len(ranking) if ranking is not None else 0
+    n_top = len(top15) if top15 is not None else 0
 
     best_auc = metric_value(
         roc_results,
@@ -200,13 +348,13 @@ if section == "🏠 Overview":
 
     with col2:
         st.metric(
-            "🔬 Candidates",
+            "🔬 Candidates Evaluated",
             n_candidates,
         )
 
     with col3:
         st.metric(
-            "🏆 Top Biomarkers",
+            "🏆 Prioritized Biomarkers",
             n_top,
         )
 
@@ -218,55 +366,42 @@ if section == "🏠 Overview":
 
     st.divider()
 
-    st.subheader("🏆 Top Biomarker Candidates")
+    st.subheader("🧪 Available Research Modules")
 
-    if top15 is not None and not top15.empty:
+    modules = [
+        ("🧬 Biomarker Explorer", "Explore candidate biomarkers and evidence."),
+        ("📊 Differential Expression", "Inspect differential-expression results."),
+        ("📈 ROC / Validation", "Evaluate diagnostic discrimination."),
+        ("🤖 Machine Learning", "Explore ML-based biomarker evidence."),
+        ("🔬 Biomarker Stability", "Assess reproducibility across validation folds."),
+        ("🧪 Pathway Analysis", "Explore functional and pathway enrichment."),
+        ("🏆 Integrated Ranking", "Review combined biomarker prioritization."),
+        ("💡 AI Research Assistant", "Interact with the evidence through an AI-assisted interface."),
+    ]
 
-        columns = [
-            c
-            for c in [
-                "gene_name",
-                "validation_rank",
-                "AUC",
-                "stability_score",
-                "ML_rank",
-                "log2FoldChange",
-                "padj",
-            ]
-            if c in top15.columns
-        ]
+    cols = st.columns(2)
 
-        st.dataframe(
-            top15[columns],
-            use_container_width=True,
-            hide_index=True,
-        )
+    for i, (title, description) in enumerate(modules):
+        with cols[i % 2]:
+            st.markdown(
+                f"""
+                **{title}**
 
-    else:
-
-        st.warning(
-            "Top biomarker data could not be loaded."
-        )
+                {description}
+                """
+            )
 
     st.divider()
 
-    st.subheader("🔬 Evidence Pipeline")
-
-    st.markdown(
-        """
-        **Differential Expression**
-        → **Candidate Selection**
-        → **Independent Validation**
-        → **ROC/AUC**
-        → **Machine Learning**
-        → **Stability**
-        → **Integrated Ranking**
-        """
+    st.info(
+        "Current scope: OncoNexa is demonstrated using TCGA-LUAD data. "
+        "Additional cancer types can be incorporated as the platform expands."
     )
 
 # ==================================================
 # DIFFERENTIAL EXPRESSION
 # ==================================================
+
 
 elif section == "📊 Differential Expression":
 
