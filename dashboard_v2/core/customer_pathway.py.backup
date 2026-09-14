@@ -1,0 +1,513 @@
+from __future__ import annotations
+
+from typing import Any
+
+import pandas as pd
+
+
+class CustomerPathwayError(ValueError):
+    """Raised when customer pathway analysis cannot be performed."""
+
+
+def _require_r_packages() -> None:
+    """Verify that the local Bioconductor dependencies are available."""
+    import subprocess
+
+    command = [
+        "Rscript",
+        "-e",
+        (
+            "ok <- requireNamespace('org.Hs.eg.db', quietly=TRUE) && "
+            "requireNamespace('AnnotationDbi', quietly=TRUE) && "
+            "requireNamespace('GO.db', quietly=TRUE); "
+            "if (!ok) quit(status=1)"
+        ),
+    ]
+
+    completed = subprocess.run(
+        command,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    if completed.returncode != 0:
+        raise CustomerPathwayError(
+            "Required local Bioconductor packages are not available: "
+            "org.Hs.eg.db, AnnotationDbi, GO.db."
+        )
+
+
+def run_customer_go_enrichment(
+    expression_data: pd.DataFrame,
+    differential_expression: pd.DataFrame,
+    gene_column: str | None = None,
+) -> dict[str, Any]:
+    """
+    Run customer-specific GO enrichment using a local human annotation database.
+
+    The uploaded expression genes form the background universe.
+    Differential-expression genes form the candidate set.
+
+    Returns:
+        {
+            "BP": DataFrame,
+            "CC": DataFrame,
+            "MF": DataFrame,
+            "mapping": DataFrame,
+            "background_size": int,
+            "candidate_size": int,
+        }
+
+    This is exploratory biological enrichment and is not clinical validation.
+    """
+    if expression_data is None or expression_data.empty:
+        raise CustomerPathwayError(
+            "Uploaded expression data are required."
+        )
+
+    if differential_expression is None or differential_expression.empty:
+        raise CustomerPathwayError(
+            "Differential-expression results are required."
+        )
+
+    if gene_column is None:
+        candidates = [
+            column
+            for column in expression_data.columns
+            if str(column).lower() in {
+                "gene",
+                "gene_id",
+                "gene_symbol",
+                "symbol",
+            }
+        ]
+
+        if not candidates:
+            raise CustomerPathwayError(
+                "Could not identify the gene column in expression data."
+            )
+
+        gene_column = candidates[0]
+
+    if gene_column not in expression_data.columns:
+        raise CustomerPathwayError(
+            f"Gene column '{gene_column}' was not found in expression data."
+        )
+
+    if "gene" not in differential_expression.columns:
+        raise CustomerPathwayError(
+            "Differential-expression results must contain a 'gene' column."
+        )
+
+    background_genes = (
+        expression_data[gene_column]
+        .dropna()
+        .astype(str)
+        .str.strip()
+        .drop_duplicates()
+        .tolist()
+    )
+
+    candidate_genes = (
+        differential_expression["gene"]
+        .dropna()
+        .astype(str)
+        .str.strip()
+        .drop_duplicates()
+        .tolist()
+    )
+
+    if len(background_genes) < 2:
+        raise CustomerPathwayError(
+            "At least two background genes are required."
+        )
+
+    if not candidate_genes:
+        raise CustomerPathwayError(
+            "No differential-expression candidate genes were found."
+        )
+
+    _require_r_packages()
+
+    import subprocess
+    import tempfile
+    from pathlib import Path
+
+    with tempfile.TemporaryDirectory(
+        prefix="onconexa_pathway_"
+    ) as temp_dir:
+
+        temp_path = Path(temp_dir)
+
+        background_file = temp_path / "background.csv"
+        candidate_file = temp_path / "candidates.csv"
+        output_file = temp_path / "go_results.csv"
+        mapping_file = temp_path / "mapping.csv"
+
+        pd.DataFrame(
+            {"SYMBOL": background_genes}
+        ).to_csv(
+            background_file,
+            index=False,
+        )
+
+        pd.DataFrame(
+            {"SYMBOL": candidate_genes}
+        ).to_csv(
+            candidate_file,
+            index=False,
+        )
+
+        r_script = temp_path / "run_go_enrichment.R"
+
+        r_script.write_text(
+            r'''
+args <- commandArgs(trailingOnly=TRUE)
+
+background_file <- args[1]
+candidate_file <- args[2]
+output_file <- args[3]
+mapping_file <- args[4]
+
+suppressPackageStartupMessages({
+    library(org.Hs.eg.db)
+    library(AnnotationDbi)
+    library(GO.db)
+})
+
+safe_phyper <- function(k, K, N, n) {
+    if (k <= 0 || K <= 0 || K >= N || n <= 0 || n > N) {
+        return(1)
+    }
+
+    k <- min(k, K, n)
+
+    p <- phyper(
+        k - 1,
+        K,
+        N - K,
+        n,
+        lower.tail=FALSE
+    )
+
+    if (is.nan(p) || is.na(p)) {
+        return(1)
+    }
+
+    p
+}
+
+background <- read.csv(
+    background_file,
+    stringsAsFactors=FALSE
+)
+
+candidates <- read.csv(
+    candidate_file,
+    stringsAsFactors=FALSE
+)
+
+background_symbols <- unique(
+    trimws(as.character(background$SYMBOL))
+)
+
+candidate_symbols <- unique(
+    trimws(as.character(candidates$SYMBOL))
+)
+
+background_map <- select(
+    org.Hs.eg.db,
+    keys=background_symbols,
+    keytype="SYMBOL",
+    columns=c("SYMBOL", "ENTREZID")
+)
+
+background_map <- unique(
+    background_map[
+        !is.na(background_map$ENTREZID) &
+        !is.na(background_map$SYMBOL),
+        c("SYMBOL", "ENTREZID")
+    ]
+)
+
+candidate_map <- background_map[
+    background_map$SYMBOL %in% candidate_symbols,
+]
+
+candidate_ids <- unique(candidate_map$ENTREZID)
+background_ids <- unique(background_map$ENTREZID)
+
+if (length(background_ids) < 2) {
+    stop("Too few background genes mapped to human annotation.")
+}
+
+if (length(candidate_ids) < 1) {
+    stop("No differential-expression candidate genes mapped to human annotation.")
+}
+
+go <- select(
+    org.Hs.eg.db,
+    keys=background_ids,
+    keytype="ENTREZID",
+    columns=c("GO", "ONTOLOGY")
+)
+
+go <- unique(
+    go[
+        !is.na(go$GO) &
+        !is.na(go$ONTOLOGY),
+        c("ENTREZID", "GO", "ONTOLOGY")
+    ]
+)
+
+term_counts <- table(go$GO)
+
+candidate_go <- go[
+    go$ENTREZID %in% candidate_ids,
+]
+
+hit_counts <- table(candidate_go$GO)
+
+terms <- intersect(
+    names(hit_counts),
+    names(term_counts)
+)
+
+if (length(terms) == 0) {
+    write.csv(
+        data.frame(),
+        output_file,
+        row.names=FALSE
+    )
+
+    write.csv(
+        background_map,
+        mapping_file,
+        row.names=FALSE
+    )
+
+    quit(save="no", status=0)
+}
+
+out <- data.frame(
+    GOID=terms,
+    Hits=as.integer(hit_counts[terms]),
+    TermSize=as.integer(term_counts[terms]),
+    stringsAsFactors=FALSE
+)
+
+N <- length(background_ids)
+K <- out$TermSize
+n <- length(candidate_ids)
+k <- out$Hits
+
+out$GeneRatio <- paste0(k, "/", n)
+out$BgRatio <- paste0(K, "/", N)
+
+out$FoldEnrichment <- (
+    (k / n) /
+    (K / N)
+)
+
+out$pvalue <- mapply(
+    safe_phyper,
+    k,
+    K,
+    MoreArgs=list(
+        N=N,
+        n=n
+    )
+)
+
+out$padj <- p.adjust(
+    out$pvalue,
+    method="BH"
+)
+
+description <- select(
+    GO.db,
+    keys=out$GOID,
+    keytype="GOID",
+    columns=c("TERM", "ONTOLOGY")
+)
+
+description <- unique(description)
+
+out <- merge(
+    out,
+    description,
+    by=c("GOID"),
+    all.x=TRUE,
+    sort=FALSE
+)
+
+contributing <- aggregate(
+    candidate_go$ENTREZID,
+    by=list(GOID=candidate_go$GO),
+    FUN=function(ids) paste(unique(ids), collapse=";")
+)
+
+names(contributing) <- c(
+    "GOID",
+    "candidate_entrez"
+)
+
+out <- merge(
+    out,
+    contributing,
+    by="GOID",
+    all.x=TRUE,
+    sort=FALSE
+)
+
+symbol_lookup <- setNames(
+    background_map$SYMBOL,
+    background_map$ENTREZID
+)
+
+out$contributing_genes <- vapply(
+    strsplit(out$candidate_entrez, ";", fixed=TRUE),
+    function(ids) {
+        genes <- unname(symbol_lookup[ids])
+        genes <- genes[!is.na(genes)]
+        paste(unique(genes), collapse="; ")
+    },
+    character(1)
+)
+
+out$candidate_entrez <- NULL
+
+out <- out[
+    order(
+        out$ONTOLOGY,
+        out$padj,
+        out$pvalue,
+        -out$FoldEnrichment
+    ),
+]
+
+write.csv(
+    out,
+    output_file,
+    row.names=FALSE
+)
+
+write.csv(
+    background_map,
+    mapping_file,
+    row.names=FALSE
+)
+''',
+            encoding="utf-8",
+        )
+
+        completed = subprocess.run(
+            [
+                "Rscript",
+                str(r_script),
+                str(background_file),
+                str(candidate_file),
+                str(output_file),
+                str(mapping_file),
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        if completed.returncode != 0:
+            message = (
+                completed.stderr.strip()
+                or completed.stdout.strip()
+                or "Unknown R enrichment error."
+            )
+
+            raise CustomerPathwayError(
+                f"GO enrichment failed: {message}"
+            )
+
+        if not output_file.exists():
+            raise CustomerPathwayError(
+                "GO enrichment completed without producing results."
+            )
+
+        if output_file.stat().st_size == 0:
+            results = pd.DataFrame()
+        else:
+            results = pd.read_csv(output_file)
+
+        mapping = pd.read_csv(mapping_file)
+
+    if results.empty:
+        empty = pd.DataFrame(
+            columns=[
+                "GOID",
+                "TERM",
+                "ONTOLOGY",
+                "Hits",
+                "TermSize",
+                "GeneRatio",
+                "BgRatio",
+                "FoldEnrichment",
+                "pvalue",
+                "padj",
+                "contributing_genes",
+            ]
+        )
+
+        return {
+            "BP": empty.copy(),
+            "CC": empty.copy(),
+            "MF": empty.copy(),
+            "mapping": mapping,
+            "background_size": len(
+                mapping["ENTREZID"].drop_duplicates()
+            ),
+            "candidate_size": len(
+                set(candidate_genes)
+                & set(mapping["SYMBOL"])
+            ),
+        }
+
+    preferred_columns = [
+        "GOID",
+        "TERM",
+        "ONTOLOGY",
+        "Hits",
+        "TermSize",
+        "GeneRatio",
+        "BgRatio",
+        "FoldEnrichment",
+        "pvalue",
+        "padj",
+        "contributing_genes",
+    ]
+
+    results = results[
+        [
+            column
+            for column in preferred_columns
+            if column in results.columns
+        ]
+    ].reset_index(drop=True)
+
+    return {
+        "BP": results[
+            results["ONTOLOGY"] == "BP"
+        ].reset_index(drop=True),
+        "CC": results[
+            results["ONTOLOGY"] == "CC"
+        ].reset_index(drop=True),
+        "MF": results[
+            results["ONTOLOGY"] == "MF"
+        ].reset_index(drop=True),
+        "mapping": mapping,
+        "background_size": len(
+            mapping["ENTREZID"].drop_duplicates()
+        ),
+        "candidate_size": len(
+            set(candidate_genes)
+            & set(mapping["SYMBOL"])
+        ),
+    }

@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 
 from core.data_loader import load_dataset
+from core.customer_report import build_customer_report
 from views.biomarker_explorer import show_biomarker_explorer
 from views.evidence_explorer import show_evidence_explorer
 from views.ai_assistant import show_ai_assistant
@@ -11,6 +12,7 @@ from views.pathway_analysis import show_pathway_analysis
 from views.integrated_ranking import show_integrated_ranking
 from views.differential_expression import show_differential_expression
 from views.roc_validation import show_roc_validation
+from views.data_upload import show_data_upload
 
 # ==================================================
 # PAGE CONFIGURATION
@@ -94,7 +96,6 @@ kegg = data.get("kegg")
 
 st.sidebar.title("🧬 OncoNexa")
 
-st.sidebar.caption("Version 2.0")
 
 st.sidebar.divider()
 
@@ -102,14 +103,16 @@ section = st.sidebar.radio(
     "Navigate",
     [
         "🏠 Overview",
-        "🧬 Biomarker Explorer",
-        "🤖 AI Biomarker Assistant",
+        "🚀 New Analysis",
         "📊 Differential Expression",
+        "🧬 Biomarker Explorer",
         "📈 ROC / Validation",
-        "🤖 Machine Learning",
+        "🧠 Machine Learning",
         "🔬 Stability",
         "🧪 Pathway Analysis",
         "🏆 Integrated Ranking",
+        "🔎 Evidence Explorer",
+        "💡 AI Biomarker Assistant",
         "📥 Downloads",
     ],
 )
@@ -119,17 +122,14 @@ st.sidebar.divider()
 
 st.sidebar.markdown(
     """
-    **Project**
-
+    **PROJECT**  
     OncoNexa
 
-    **Disease**
-
+    **DISEASE**  
     Cancer Biomarker Discovery
 
-    **Analysis**
-
-    RNA-seq + Validation + ML
+    **ANALYSIS**  
+    RNA-seq · Validation · ML
     """
 )
 
@@ -154,7 +154,13 @@ def metric_value(df, column, default=0):
 # OVERVIEW
 # ==================================================
 
-if section == "🏠 Overview":
+if section == "🚀 New Analysis":
+
+    from views.data_upload import show_data_upload
+
+    show_data_upload()
+
+elif section == "🏠 Overview":
 
     st.title("🧬 OncoNexa")
 
@@ -313,18 +319,22 @@ if section == "🏠 Overview":
 
     st.divider()
 
-    st.subheader("📊 Current Demonstration")
+    st.subheader("📊 OncoNexa Demonstration")
 
     st.markdown(
         """
         ### Lung Adenocarcinoma — TCGA-LUAD
 
-        The current OncoNexa demonstration uses a validated
-        **lung adenocarcinoma (LUAD)** biomarker analysis.
+        Explore a completed OncoNexa biomarker discovery analysis
+        using a validated **lung adenocarcinoma (LUAD)** dataset.
 
-        This represents the first disease-specific implementation
-        of the platform. The architecture is designed to support
-        expansion to additional cancer types.
+        This free demonstration lets visitors explore the platform's
+        biomarker discovery, validation, machine-learning, stability,
+        and biological interpretation capabilities.
+
+        **Ready to analyze your own data?** Use **🚀 New Analysis**
+        in the sidebar to upload your expression matrix and sample
+        metadata for a customer-specific analysis.
         """
     )
 
@@ -372,7 +382,7 @@ if section == "🏠 Overview":
         ("🧬 Biomarker Explorer", "Explore candidate biomarkers and evidence."),
         ("📊 Differential Expression", "Inspect differential-expression results."),
         ("📈 ROC / Validation", "Evaluate diagnostic discrimination."),
-        ("🤖 Machine Learning", "Explore ML-based biomarker evidence."),
+        ("🧠 Machine Learning", "Explore ML-based biomarker evidence."),
         ("🔬 Biomarker Stability", "Assess reproducibility across validation folds."),
         ("🧪 Pathway Analysis", "Explore functional and pathway enrichment."),
         ("🏆 Integrated Ranking", "Review combined biomarker prioritization."),
@@ -394,8 +404,9 @@ if section == "🏠 Overview":
     st.divider()
 
     st.info(
-        "Current scope: OncoNexa is demonstrated using TCGA-LUAD data. "
-        "Additional cancer types can be incorporated as the platform expands."
+        "Free demonstration: TCGA-LUAD. "
+        "Customer analyses can be performed using uploaded cancer expression "
+        "data and sample metadata."
     )
 
 # ==================================================
@@ -419,7 +430,7 @@ elif section == "📈 ROC / Validation":
         validation_ranking,
     )
 
-elif section == "🤖 Machine Learning":
+elif section == "🧠 Machine Learning":
 
     show_machine_learning(data)
 
@@ -431,7 +442,7 @@ elif section == "🧬 Biomarker Explorer":
 
     show_biomarker_explorer(data)
 
-elif section == "🤖 AI Biomarker Assistant":
+elif section == "💡 AI Biomarker Assistant":
 
     show_ai_assistant(data)
 
@@ -527,9 +538,9 @@ elif section == "📈 ROC / Validation":
 # MACHINE LEARNING
 # ==================================================
 
-elif section == "🤖 Machine Learning":
+elif section == "🧠 Machine Learning":
 
-    st.title("🤖 Machine Learning")
+    st.title("🧠 Machine Learning")
 
     if model_comparison is not None:
 
@@ -575,96 +586,194 @@ elif section == "🏆 Integrated Ranking":
 
 elif section == "📥 Downloads":
 
-    st.title("📥 Research Data & Downloads")
+    st.title("📥 OncoNexa Reports & Downloads")
 
-    st.markdown(
-        """
-        Download the canonical datasets used by the
-        OncoNexa — AI-Powered Cancer Biomarker Discovery Platform.
-        """
-    )
-    st.subheader("📋 Research Summary")
-
-    st.markdown(
-        """
-        This section provides the canonical V2 research outputs.
-        The current demonstration uses the validated LUAD biomarker
-        analysis pipeline and are provided for further analysis,
-        reproducibility, and reporting.
-        """
+    customer_context = st.session_state.get(
+        "onconexa_customer_context"
     )
 
-    summary_data = {
-        "Metric": [
-            "Significant DEGs",
-            "Biomarker Candidates",
-            "Top Biomarkers",
-            "Validated Biomarkers",
-            "GO Biological Process Terms",
-            "GO Cellular Component Terms",
-            "GO Molecular Function Terms",
-            "KEGG Pathways",
-        ],
-        "Value": [
-            len(deg) if deg is not None else 0,
-            len(ranking) if ranking is not None else 0,
-            len(top15) if top15 is not None else 0,
-            len(validation_stats)
-            if validation_stats is not None
-            else 0,
-            len(go_bp) if go_bp is not None else 0,
-            len(go_cc) if go_cc is not None else 0,
-            len(go_mf) if go_mf is not None else 0,
-            len(kegg) if kegg is not None else 0,
-        ],
-    }
+    if customer_context is None:
 
-    summary_df = pd.DataFrame(summary_data)
+        st.info(
+            "Upload a customer dataset and complete an analysis "
+            "to generate the OncoNexa report and downloadable results."
+        )
 
-    st.dataframe(
-        summary_df,
-        use_container_width=True,
-        hide_index=True,
-    )
+    else:
 
-    st.download_button(
-        label="📥 Download Research Summary",
-        data=summary_df.to_csv(index=False),
-        file_name="LUAD_research_summary.csv",
-        mime="text/csv",
-    )
+        cancer_type = (
+            getattr(customer_context, "cancer_type", None)
+            or "Customer Cancer Dataset"
+        )
 
-    st.divider()
+        comparison = (
+            getattr(customer_context, "comparison", None)
+            or "Group comparison"
+        )
 
-    st.subheader("📦 Canonical Analysis Datasets")
+        analysis_id = (
+            getattr(customer_context, "analysis_id", None)
+            or "customer_analysis"
+        )
 
-    download_items = {
-        "Top Biomarkers": top15,
-        "Integrated Ranking": ranking,
-        "ROC / AUC Results": roc_results,
-        "Validation Statistics": validation_stats,
-        "ML Importance": rf_importance,
-        "Stability Results": stability,
-        "GO Biological Process": go_bp,
-        "GO Cellular Component": go_cc,
-        "GO Molecular Function": go_mf,
-        "KEGG Pathways": kegg,
-    }
+        st.markdown(
+            f"""
+            ### Customer Analysis Report
 
-    for label, dataframe in download_items.items():
+            **Cancer / Dataset:** {cancer_type}  
+            **Comparison:** {comparison}  
+            **Analysis ID:** `{analysis_id}`
+            """
+        )
 
-        if dataframe is not None and not dataframe.empty:
+        st.divider()
+
+        # ==================================================
+        # PROFESSIONAL PDF REPORT
+        # ==================================================
+
+        st.subheader("📄 Professional OncoNexa Report")
+
+        st.markdown(
+            """
+            Generate a professional customer-facing PDF containing
+            the key findings from your OncoNexa biomarker analysis.
+            """
+        )
+
+        try:
+
+            pdf_bytes = build_customer_report(
+                customer_context=customer_context,
+                roc_results=st.session_state.get(
+                    "onconexa_customer_roc_results"
+                ),
+                ml_results=st.session_state.get(
+                    "onconexa_customer_ml_results"
+                ),
+                stability_results=st.session_state.get(
+                    "onconexa_customer_stability_results"
+                ),
+                pathway_cache=st.session_state.get(
+                    "onconexa_customer_pathway_cache"
+                ),
+            )
 
             st.download_button(
-                label=f"📥 Download {label}",
-                data=dataframe.to_csv(index=False),
-                file_name=(
-                    label.lower()
-                    .replace(" ", "_")
-                    .replace("/", "_")
-                    + ".csv"
+                label="📄 Download Professional OncoNexa Report",
+                data=pdf_bytes,
+                file_name=f"OncoNexa_Biomarker_Report_{analysis_id}.pdf",
+                mime="application/pdf",
+                type="primary",
+            )
+
+            st.caption(
+                "Includes differential expression, biomarker discrimination, "
+                "machine learning, stability, functional biology, interpretation, "
+                "and next-step recommendations where available."
+            )
+
+        except Exception as exc:
+
+            st.error(
+                f"Unable to generate the PDF report: {exc}"
+            )
+
+        st.divider()
+
+        # ==================================================
+        # CUSTOMER DATA DOWNLOADS
+        # ==================================================
+
+        st.subheader("📦 Analysis Results")
+
+        expression_data = getattr(
+            customer_context,
+            "expression_data",
+            None,
+        )
+
+        metadata = getattr(
+            customer_context,
+            "metadata",
+            None,
+        )
+
+        differential_expression = getattr(
+            customer_context,
+            "differential_expression",
+            None,
+        )
+
+        download_items = [
+            (
+                "Differential Expression Results",
+                differential_expression,
+                "differential_expression.csv",
+            ),
+            (
+                "Expression Matrix",
+                expression_data,
+                "expression_matrix.csv",
+            ),
+            (
+                "Sample Metadata",
+                metadata,
+                "sample_metadata.csv",
+            ),
+            (
+                "ROC / AUC Results",
+                st.session_state.get(
+                    "onconexa_customer_roc_results"
                 ),
-                mime="text/csv",
+                "roc_auc_results.csv",
+            ),
+            (
+                "Machine Learning Results",
+                st.session_state.get(
+                    "onconexa_customer_ml_results"
+                ),
+                "machine_learning_results.csv",
+            ),
+            (
+                "Stability Results",
+                st.session_state.get(
+                    "onconexa_customer_stability_results"
+                ),
+                "stability_results.csv",
+            ),
+        ]
+
+        available_downloads = 0
+
+        for label, dataframe, filename in download_items:
+
+            if dataframe is not None:
+
+                try:
+
+                    if hasattr(dataframe, "empty") and dataframe.empty:
+                        continue
+
+                    csv_data = dataframe.to_csv(index=False)
+
+                    st.download_button(
+                        label=f"📥 Download {label}",
+                        data=csv_data,
+                        file_name=filename,
+                        mime="text/csv",
+                        key=f"download_{filename}",
+                    )
+
+                    available_downloads += 1
+
+                except Exception:
+                    continue
+
+        if available_downloads == 0:
+
+            st.info(
+                "No downloadable analysis result tables are currently available."
             )
 
 
@@ -674,10 +783,12 @@ elif section == "📥 Downloads":
 
 st.sidebar.divider()
 
-st.sidebar.caption(
-    "OncoNexa — AI-Powered Pan-Cancer Biomarker Discovery Platform"
+st.sidebar.markdown(
+    "**OncoNexa**"
 )
 
 st.sidebar.caption(
-    "Version 2.0"
+    "AI-Powered Pan-Cancer Biomarker Discovery Platform"
 )
+
+

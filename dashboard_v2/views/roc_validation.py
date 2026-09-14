@@ -2,8 +2,192 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+from core.customer_roc import calculate_customer_roc
+
+
+def _show_customer_roc(customer_context):
+    st.title("📈 ROC / Biomarker Discrimination")
+
+    st.markdown(
+        f"""
+        ### Biomarker ROC Analysis — {customer_context.cancer_type}
+
+        Evaluation of discriminatory performance for candidate biomarkers
+        within the uploaded customer dataset.
+
+        **Comparison:** {customer_context.comparison}
+
+        **Important:** This is within-dataset ROC/AUC analysis. It is not
+        independent-cohort or clinical validation.
+        """
+    )
+
+    cached_roc = st.session_state.get(
+        "onconexa_customer_roc_results"
+    )
+    cached_analysis_id = st.session_state.get(
+        "onconexa_customer_roc_analysis_id"
+    )
+
+    try:
+        if (
+            cached_roc is not None
+            and cached_analysis_id == customer_context.analysis_id
+        ):
+            roc = cached_roc
+        else:
+            roc = calculate_customer_roc(
+                expression=customer_context.expression_data,
+                metadata=customer_context.metadata,
+                candidates=customer_context.differential_expression,
+                gene_column=customer_context.gene_column or "Gene",
+            )
+
+            st.session_state[
+                "onconexa_customer_roc_results"
+            ] = roc
+
+            st.session_state[
+                "onconexa_customer_roc_analysis_id"
+            ] = customer_context.analysis_id
+
+    except Exception as exc:
+        st.error(f"Customer ROC analysis could not be calculated: {exc}")
+        return
+
+    if roc.empty:
+        st.warning("No customer biomarkers could be evaluated by ROC analysis.")
+        return
+
+    st.subheader("📊 ROC Summary")
+
+    n_genes = len(roc)
+    mean_auc = roc["AUC"].mean()
+    best_auc = roc["AUC"].max()
+    best_gene = roc.loc[roc["AUC"].idxmax(), "gene_name"]
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric("Evaluated Biomarkers", f"{n_genes:,}")
+
+    with col2:
+        st.metric("Mean ROC-AUC", f"{mean_auc:.3f}")
+
+    with col3:
+        st.metric("Best ROC-AUC", f"{best_auc:.3f}")
+
+    with col4:
+        st.metric("Best Biomarker", str(best_gene))
+
+    st.divider()
+
+    st.subheader("🏆 ROC-AUC Ranking")
+
+    display_columns = [
+        "ROC_rank",
+        "gene_name",
+        "AUC",
+        "sensitivity",
+        "specificity",
+        "threshold",
+        "direction",
+    ]
+
+    st.dataframe(
+        roc[display_columns],
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    auc_df = roc.sort_values("AUC", ascending=True)
+
+    fig = px.bar(
+        auc_df,
+        x="AUC",
+        y="gene_name",
+        orientation="h",
+        title="Biomarker Discriminatory Performance",
+        hover_data=[
+            c
+            for c in [
+                "AUC",
+                "sensitivity",
+                "specificity",
+                "threshold",
+                "direction",
+            ]
+            if c in auc_df.columns
+        ],
+    )
+
+    fig.update_layout(
+        height=max(500, len(auc_df) * 25),
+        xaxis_title="ROC-AUC",
+        yaxis_title="Biomarker",
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.divider()
+
+    st.subheader("🔬 Biomarker ROC Detail")
+
+    selected_gene = st.selectbox(
+        "Select a biomarker",
+        roc["gene_name"].astype(str).tolist(),
+    )
+
+    selected = roc[
+        roc["gene_name"].astype(str) == selected_gene
+    ].iloc[0]
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric("ROC-AUC", f"{selected['AUC']:.3f}")
+
+    with col2:
+        st.metric("Sensitivity", f"{selected['sensitivity'] * 100:.1f}%")
+
+    with col3:
+        st.metric("Specificity", f"{selected['specificity'] * 100:.1f}%")
+
+    with col4:
+        st.metric("Threshold", f"{selected['threshold']:.3f}")
+
+    st.caption(
+        "ROC/AUC values are calculated from the uploaded dataset. "
+        "Independent validation requires a separate cohort."
+    )
+
+    st.subheader("📥 Download Customer ROC Results")
+
+    csv = roc.to_csv(index=False).encode("utf-8")
+
+    st.download_button(
+        label="📥 Download ROC/AUC Results",
+        data=csv,
+        file_name=(
+            f"{customer_context.cancer_type}_"
+            "customer_ROC_AUC_results.csv"
+        ),
+        mime="text/csv",
+    )
+
 
 def show_roc_validation(roc_results, validation_stats, validation_ranking):
+
+    customer_context = st.session_state.get(
+        "onconexa_customer_context"
+    )
+
+    if (
+        customer_context is not None
+        and customer_context.has_differential_expression()
+    ):
+        _show_customer_roc(customer_context)
+        return
 
     st.title("📈 ROC / Independent Validation")
 

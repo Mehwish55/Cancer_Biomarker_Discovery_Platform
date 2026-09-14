@@ -1,8 +1,256 @@
 import streamlit as st
 import plotly.express as px
 
+from core.customer_stability import run_customer_stability
+
+
+def _show_customer_stability(customer_context):
+    """Display stability evidence for the uploaded analysis."""
+
+    st.title("🔬 Biomarker Stability Analysis")
+
+    st.markdown(
+        f"""
+        Evaluate the consistency of biomarker prioritization for
+        **{customer_context.cancer_type}**.
+
+        **Comparison:** {customer_context.comparison}
+
+        Stability is calculated from repeated within-dataset
+        resampling of the uploaded expression data.
+        """
+    )
+
+    st.divider()
+
+    cached_result = st.session_state.get(
+        "onconexa_customer_stability_results"
+    )
+    cached_analysis_id = st.session_state.get(
+        "onconexa_customer_stability_analysis_id"
+    )
+
+    try:
+        if (
+            cached_result is not None
+            and cached_analysis_id == customer_context.analysis_id
+        ):
+            result = cached_result
+        else:
+            result = run_customer_stability(
+                expression_data=customer_context.expression_data,
+                metadata=customer_context.metadata,
+                differential_expression=(
+                    customer_context.differential_expression
+                ),
+                gene_column=customer_context.gene_column,
+                sample_columns=customer_context.sample_columns,
+                n_iterations=50,
+                random_state=42,
+            )
+
+            st.session_state[
+                "onconexa_customer_stability_results"
+            ] = result
+            st.session_state[
+                "onconexa_customer_stability_analysis_id"
+            ] = customer_context.analysis_id
+
+    except Exception as exc:
+        st.error(
+            f"Stability analysis could not be completed: {exc}"
+        )
+        return
+
+    stability = result["stability"]
+
+    st.header("📊 Stability Overview")
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric(
+            "Biomarkers Evaluated",
+            result["n_features"],
+        )
+
+    with col2:
+        st.metric(
+            "Resampling Iterations",
+            result["n_iterations"],
+        )
+
+    with col3:
+        st.metric(
+            "Highest Stability",
+            f"{stability['stability_score'].max():.3f}",
+        )
+
+    with col4:
+        st.metric(
+            "Stable ≥0.80",
+            int(
+                (
+                    stability["stability_score"] >= 0.80
+                ).sum()
+            ),
+        )
+
+    st.caption(
+        f"Reference group: {result['reference_group']} · "
+        f"Positive group: {result['positive_group']}"
+    )
+
+    st.divider()
+
+    st.header("🏆 Stability Ranking")
+
+    max_genes = min(40, len(stability))
+
+    if max_genes >= 5:
+        default_top_n = min(15, max_genes)
+
+        top_n = st.slider(
+            "Number of biomarkers to display",
+            min_value=5,
+            max_value=max_genes,
+            value=default_top_n,
+            step=5,
+            key="customer_stability_top_n",
+        )
+    else:
+        top_n = max_genes
+
+    ranking_df = (
+        stability
+        .sort_values(
+            "stability_score",
+            ascending=False,
+        )
+        .head(top_n)
+        .sort_values(
+            "stability_score",
+            ascending=True,
+        )
+    )
+
+    fig_stability = px.bar(
+        ranking_df,
+        x="stability_score",
+        y="gene_name",
+        orientation="h",
+        labels={
+            "stability_score": "Stability Score",
+            "gene_name": "Gene",
+        },
+        title="Most Stable Biomarker Candidates",
+        hover_data=[
+            c
+            for c in [
+                "mean_rf_importance",
+                "sd_rf_importance",
+                "rf_importance_consistency",
+                "rank_consistency",
+                "top10_stability",
+                "top20_stability",
+            ]
+            if c in ranking_df.columns
+        ],
+    )
+
+    fig_stability.update_layout(
+        height=max(450, top_n * 28),
+        yaxis={
+            "categoryorder": "total ascending"
+        },
+    )
+
+    st.plotly_chart(
+        fig_stability,
+        use_container_width=True,
+    )
+
+    st.divider()
+
+    st.header("📋 Stability Results")
+
+    st.markdown(
+        """
+        The table reports repeated-resampling stability measurements
+        generated from the uploaded expression dataset.
+        """
+    )
+
+    st.dataframe(
+        stability,
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    st.divider()
+
+    st.header("🧠 How to Interpret Stability")
+
+    st.markdown(
+        """
+        **What does stability mean?**
+
+        A stable biomarker remains consistently important across
+        repeated resampling analyses of the evaluated dataset.
+
+        **Higher stability**
+
+        A higher stability score indicates more consistent
+        model-based prioritization under the resampling procedure.
+
+        **Why is stability useful?**
+
+        A biomarker can show differential expression or strong
+        discrimination while still being sensitive to sampling
+        variation. Stability provides an additional
+        reproducibility-oriented evidence layer.
+
+        **Important limitation**
+
+        This stability analysis is based on the uploaded dataset.
+        It is not independent validation, clinical validation,
+        or evidence of biological causality.
+
+        Stability should therefore be interpreted together with
+        differential expression, ROC/AUC, machine learning,
+        independent validation where available, and biological
+        evidence.
+        """
+    )
+
+    st.divider()
+
+    csv_data = stability.to_csv(index=False).encode("utf-8")
+
+    st.download_button(
+        "📥 Download Stability Results",
+        data=csv_data,
+        file_name=(
+            f"{customer_context.cancer_type}"
+            "_stability_results.csv"
+        ),
+        mime="text/csv",
+    )
+
 
 def show_stability(data):
+
+    customer_context = st.session_state.get(
+        "onconexa_customer_context"
+    )
+
+    if (
+        customer_context is not None
+        and customer_context.has_differential_expression()
+    ):
+        _show_customer_stability(customer_context)
+        return
+
     """
     Biomarker stability analysis page.
 

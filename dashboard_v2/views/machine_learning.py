@@ -1,8 +1,320 @@
 import streamlit as st
 import plotly.express as px
 
+from core.customer_ml import run_customer_ml
+
+
+
+def _show_customer_ml(customer_context):
+    """Display ML evidence calculated from the uploaded dataset."""
+
+    st.title("🤖 Machine Learning Evidence")
+
+    st.markdown(
+        f"""
+        ### Machine Learning Analysis — {customer_context.cancer_type}
+
+        Machine learning analysis based on the biomarkers identified from
+        the uploaded dataset.
+
+        **Comparison:** {customer_context.comparison}
+
+        **Important:** Model performance is estimated using stratified
+        cross-validation within the uploaded dataset. This is exploratory
+        dataset-level evidence and is not independent validation or
+        clinical validation.
+        """
+    )
+
+    st.divider()
+
+    try:
+        cached_result = st.session_state.get(
+            "onconexa_customer_ml_results"
+        )
+
+        cached_analysis_id = st.session_state.get(
+            "onconexa_customer_ml_analysis_id"
+        )
+
+        if (
+            cached_result is not None
+            and cached_analysis_id == customer_context.analysis_id
+        ):
+            result = cached_result
+        else:
+            result = run_customer_ml(
+                expression_data=customer_context.expression_data,
+                metadata=customer_context.metadata,
+                differential_expression=(
+                    customer_context.differential_expression
+                ),
+                gene_column=customer_context.gene_column,
+                sample_columns=customer_context.sample_columns,
+            )
+
+            st.session_state[
+                "onconexa_customer_ml_results"
+            ] = result
+
+            st.session_state[
+                "onconexa_customer_ml_analysis_id"
+            ] = customer_context.analysis_id
+
+    except Exception as exc:
+        st.error(
+            f"Machine learning analysis could not be calculated: {exc}"
+        )
+        return
+
+    model_comparison = result["model_comparison"]
+    rf_importance = result["rf_importance"]
+
+    # ==================================================
+    # ANALYSIS SUMMARY
+    # ==================================================
+
+    st.subheader("📊 Analysis Summary")
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric(
+            "Samples",
+            f'{result["n_samples"]:,}',
+        )
+
+    with col2:
+        st.metric(
+            "Candidate Genes",
+            f'{result["n_features"]:,}',
+        )
+
+    with col3:
+        st.metric(
+            "CV Folds",
+            str(result["cv_folds"]),
+        )
+
+    with col4:
+        st.metric(
+            "Positive Group",
+            str(result["positive_group"]),
+        )
+
+    st.caption(
+        f'Classification compares **{result["reference_group"]}** '
+        f'against **{result["positive_group"]}**.'
+    )
+
+    st.divider()
+
+    # ==================================================
+    # MODEL PERFORMANCE
+    # ==================================================
+
+    st.header("📈 Model Performance")
+
+    st.markdown(
+        """
+        Performance metrics are calculated using stratified
+        cross-validation on the uploaded dataset.
+        """
+    )
+
+    display_columns = [
+        c
+        for c in [
+            "model",
+            "AUC_mean",
+            "AUC_std",
+            "Accuracy_mean",
+            "Precision_mean",
+            "Recall_mean",
+            "F1_mean",
+            "CV_folds",
+        ]
+        if c in model_comparison.columns
+    ]
+
+    st.dataframe(
+        model_comparison[display_columns],
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    if (
+        "model" in model_comparison.columns
+        and "AUC_mean" in model_comparison.columns
+    ):
+        fig_model = px.bar(
+            model_comparison,
+            x="model",
+            y="AUC_mean",
+            text_auto=".3f",
+            labels={
+                "model": "Model",
+                "AUC_mean": "Cross-Validated ROC-AUC",
+            },
+            title="Cross-Validated Model Performance",
+        )
+
+        fig_model.update_layout(
+            height=450,
+            yaxis=dict(range=[0, 1]),
+        )
+
+        st.plotly_chart(
+            fig_model,
+            use_container_width=True,
+        )
+
+    st.divider()
+
+    # ==================================================
+    # RANDOM FOREST FEATURE IMPORTANCE
+    # ==================================================
+
+    st.header("🌲 Random Forest Feature Importance")
+
+    st.markdown(
+        """
+        Random Forest feature importance describes the relative contribution
+        of candidate genes to the fitted Random Forest model. It should be
+        interpreted as exploratory model evidence rather than independent
+        biomarker validation.
+        """
+    )
+
+    st.dataframe(
+        rf_importance,
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    if (
+        "gene_name" in rf_importance.columns
+        and "importance" in rf_importance.columns
+        and not rf_importance.empty
+    ):
+        max_genes = min(40, len(rf_importance))
+        min_genes = min(5, max_genes)
+
+        if max_genes >= min_genes:
+            default_genes = min(15, max_genes)
+
+            top_n = st.slider(
+                "Number of genes to display",
+                min_value=min_genes,
+                max_value=max_genes,
+                value=default_genes,
+                step=5 if max_genes >= 10 else 1,
+                key="customer_ml_top_n",
+            )
+
+            plot_df = (
+                rf_importance
+                .sort_values(
+                    "importance",
+                    ascending=False,
+                )
+                .head(top_n)
+                .sort_values(
+                    "importance",
+                    ascending=True,
+                )
+            )
+
+            st.subheader(
+                f"🏆 Top {top_n} ML Biomarkers"
+            )
+
+            fig_importance = px.bar(
+                plot_df,
+                x="importance",
+                y="gene_name",
+                orientation="h",
+                labels={
+                    "importance": "Feature Importance",
+                    "gene_name": "Gene",
+                },
+                title=(
+                    "Random Forest Feature Importance "
+                    f"— Top {top_n} Genes"
+                ),
+                hover_data=[
+                    c
+                    for c in ["ML_rank"]
+                    if c in plot_df.columns
+                ],
+            )
+
+            fig_importance.update_layout(
+                height=max(450, top_n * 28),
+                yaxis={
+                    "categoryorder": "total ascending"
+                },
+            )
+
+            st.plotly_chart(
+                fig_importance,
+                use_container_width=True,
+            )
+
+    st.divider()
+
+    # ==================================================
+    # INTERPRETATION
+    # ==================================================
+
+    st.header("🧠 How to Interpret the ML Evidence")
+
+    st.markdown(
+        """
+        **Model performance**
+
+        Higher cross-validated ROC-AUC indicates stronger discriminatory
+        performance between the two analyzed groups within the uploaded
+        dataset.
+
+        **Random Forest feature importance**
+
+        Higher importance indicates greater contribution to the fitted
+        Random Forest model.
+
+        **ML ranking**
+
+        A lower ML rank represents a stronger position within the
+        machine-learning-based prioritization.
+
+        **Important limitation**
+
+        These results are derived from the uploaded dataset. High model
+        performance does not by itself establish biological causality,
+        independent validation, or clinical utility.
+        """
+    )
+
 
 def show_machine_learning(data):
+    """
+    Machine Learning evidence page.
+
+    Customer analyses use the uploaded dataset and the customer ML engine.
+    Existing V1/LUAD outputs remain available as the fallback.
+    """
+
+    customer_context = st.session_state.get(
+        "onconexa_customer_context"
+    )
+
+    if (
+        customer_context is not None
+        and customer_context.has_differential_expression()
+    ):
+        _show_customer_ml(customer_context)
+        return
+
     """
     Machine Learning evidence page.
 

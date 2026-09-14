@@ -1,0 +1,307 @@
+import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.express as px
+
+
+def show_differential_expression(deg):
+
+    customer_context = st.session_state.get(
+        "onconexa_customer_context"
+    )
+
+    if (
+        customer_context is not None
+        and customer_context.has_differential_expression()
+    ):
+        deg = customer_context.differential_expression
+        analysis_label = customer_context.cancer_type
+        comparison_label = customer_context.comparison
+        is_customer_analysis = True
+    else:
+        analysis_label = "LUAD"
+        comparison_label = "Tumor vs Normal"
+        is_customer_analysis = False
+    st.title("📊 Differential Expression Analysis")
+
+    if is_customer_analysis:
+        st.markdown(
+            f"""
+            Explore differential expression results for
+            **{analysis_label}**.
+
+            **Comparison:** {comparison_label}
+
+            This analysis uses your uploaded customer dataset and the
+            OncoNexa differential expression pipeline.
+            """
+        )
+    else:
+        st.markdown(
+            """
+            Explore the differential expression results from the LUAD
+            tumor-versus-normal RNA-seq analysis.
+
+            This page displays the **V1 pipeline results directly** and does
+            not recalculate differential expression.
+            """
+        )
+
+    if deg is None or deg.empty:
+
+        st.error(
+            "Differential expression data could not be loaded."
+        )
+
+        return
+
+    # ==================================================
+    # DATA PREPARATION
+    # ==================================================
+
+    df = deg.copy()
+
+    # Numeric columns
+    for column in [
+        "log2FoldChange",
+        "pvalue",
+        "padj",
+        "baseMean",
+    ]:
+
+        if column in df.columns:
+
+            df[column] = pd.to_numeric(
+                df[column],
+                errors="coerce"
+            )
+
+    # ==================================================
+    # SUMMARY
+    # ==================================================
+
+    st.subheader("📈 Differential Expression Summary")
+
+    total_genes = len(df)
+
+    if "log2FoldChange" in df.columns:
+
+        upregulated = int(
+            (df["log2FoldChange"] > 0).sum()
+        )
+
+        downregulated = int(
+            (df["log2FoldChange"] < 0).sum()
+        )
+
+    else:
+
+        upregulated = 0
+        downregulated = 0
+
+    significant = (
+        int(df["padj"].notna().sum())
+        if "padj" in df.columns
+        else total_genes
+    )
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric(
+            "Significant DEGs",
+            f"{total_genes:,}"
+        )
+
+    with col2:
+        st.metric(
+            "Upregulated",
+            f"{upregulated:,}"
+        )
+
+    with col3:
+        st.metric(
+            "Downregulated",
+            f"{downregulated:,}"
+        )
+
+    with col4:
+        st.metric(
+            "Genes with FDR",
+            f"{significant:,}"
+        )
+
+    st.divider()
+
+    # ==================================================
+    # FILTERS
+    # ==================================================
+
+    st.subheader("🔎 Explore Genes")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        search_gene = st.text_input(
+            "Search gene",
+            placeholder="e.g. EGFR, TP53, KRAS"
+        )
+
+    with col2:
+
+        direction_options = ["All"]
+
+        if "direction" in df.columns:
+
+            direction_options += sorted(
+                df["direction"]
+                .dropna()
+                .astype(str)
+                .unique()
+                .tolist()
+            )
+
+        direction = st.selectbox(
+            "Expression direction",
+            direction_options
+        )
+
+    filtered = df.copy()
+
+    # Gene search
+    if search_gene.strip():
+
+        if "gene_name" in filtered.columns:
+
+            filtered = filtered[
+                filtered["gene_name"]
+                .astype(str)
+                .str.contains(
+                    search_gene.strip(),
+                    case=False,
+                    na=False
+                )
+            ]
+
+    # Direction filter
+    if (
+        direction != "All"
+        and "direction" in filtered.columns
+    ):
+
+        filtered = filtered[
+            filtered["direction"].astype(str) == direction
+        ]
+
+    st.write(
+        f"Showing **{len(filtered):,}** genes"
+    )
+
+    # ==================================================
+    # VOLCANO-STYLE PLOT
+    # ==================================================
+
+    if (
+        "log2FoldChange" in filtered.columns
+        and "padj" in filtered.columns
+    ):
+
+        plot_df = filtered.copy()
+
+        plot_df["padj_plot"] = plot_df["padj"].clip(
+            lower=1e-300
+        )
+
+        plot_df["-log10(FDR)"] = -np.log10(
+            plot_df["padj_plot"]
+        )
+
+        plot_df["Expression"] = np.where(
+            plot_df["log2FoldChange"] > 0,
+            "Upregulated",
+            "Downregulated"
+        )
+
+        st.subheader("🌋 Differential Expression Landscape")
+
+        fig = px.scatter(
+            plot_df,
+            x="log2FoldChange",
+            y="-log10(FDR)",
+            color="Expression",
+            hover_data=[
+                c
+                for c in [
+                    "gene_name",
+                    "log2FoldChange",
+                    "padj",
+                    "pvalue",
+                    "baseMean",
+                ]
+                if c in plot_df.columns
+            ],
+            title="LUAD Differential Expression",
+        )
+
+        fig.update_layout(
+            height=600,
+            xaxis_title="log2 Fold Change",
+            yaxis_title="-log10 Adjusted P-value",
+        )
+
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
+
+    # ==================================================
+    # TOP GENES
+    # ==================================================
+
+    st.subheader("🏆 Most Significant Genes")
+
+    table_df = filtered.copy()
+
+    if "padj" in table_df.columns:
+
+        table_df = table_df.sort_values(
+            "padj",
+            ascending=True
+        )
+
+    display_columns = [
+        c
+        for c in [
+            "gene_name",
+            "baseMean",
+            "log2FoldChange",
+            "pvalue",
+            "padj",
+            "direction",
+        ]
+        if c in table_df.columns
+    ]
+
+    st.dataframe(
+        table_df[display_columns].head(50),
+        use_container_width=True,
+        hide_index=True
+    )
+
+    # ==================================================
+    # DOWNLOAD
+    # ==================================================
+
+    st.subheader("📥 Download Results")
+
+    csv = filtered.to_csv(
+        index=False
+    ).encode("utf-8")
+
+    st.download_button(
+        label="📥 Download Filtered DEG Results",
+        data=csv,
+        file_name="LUAD_filtered_DEG_results.csv",
+        mime="text/csv",
+    )
