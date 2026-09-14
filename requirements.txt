@@ -1,4 +1,8 @@
 streamlit==1.61.1
 pandas==3.0.5
+numpy==2.5.2
+plotly==7.0.0
 PyYAML
-plotly
+scikit-learn==1.9.1
+reportlab==5.0.1
+scipy==1.18.1
