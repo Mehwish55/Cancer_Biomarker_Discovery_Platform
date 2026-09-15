@@ -158,48 +158,16 @@ def metric_value(df, column, default=0):
 
 if section == "🚀 New Analysis":
 
-    st.title("🔒 Professional Analysis")
+    from views.data_upload import show_data_upload
 
-    st.markdown(
-        """
-        ## Analyze Your Cancer Dataset
-
-        Uploading and analyzing your own research dataset is available
-        through the OncoNexa professional analysis services.
-
-        ### Research Analysis Services
-
-        **Essential — €200**
-        Initial biomarker discovery and biological analysis.
-
-        **Advanced — €500**
-        Complete biomarker discovery, validation, machine learning,
-        stability analysis, evidence integration, and professional reporting.
-
-        **Custom Research — from €1,000**
-        Complex datasets, multiple comparisons, custom workflows,
-        additional validation, and customized reporting.
-        """
-    )
-
-    st.divider()
+    st.title("🚀 New Analysis")
 
     st.info(
-        "Please request an analysis before uploading your research dataset. "
-        "The professional analysis workflow is provided as a paid service."
+        "🧪 Testing mode: this professional analysis workflow is "
+        "temporarily open for platform testing."
     )
 
-    st.markdown(
-        """
-        ### What happens next?
-
-        1. Select the analysis package that matches your project.
-        2. Contact OncoNexa to discuss your dataset and requirements.
-        3. After the project is confirmed, your dataset can be analyzed
-           using the OncoNexa workflow.
-        4. You receive the analysis results, tables, figures, and report.
-        """
-    )
+    show_data_upload()
 
 elif section == "🏠 Overview":
 
