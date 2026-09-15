@@ -34,52 +34,71 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    .stApp {
-        background-color: #0B0B0B;
-        color: #F5F5F5;
-    }
 
-    [data-testid="stAppViewContainer"] {
-        background-color: #0B0B0B;
+    /* ==================================================
+       GLOBAL APPLICATION
+       ================================================== */
+
+    .stApp,
+    [data-testid="stAppViewContainer"],
+    [data-testid="stMain"],
+    .main,
+    .block-container {
+        background-color: #0B0B0B !important;
+        color: #F5F5F5 !important;
     }
 
     [data-testid="stHeader"] {
-        background-color: #0B0B0B;
-    }
-
-    [data-testid="stSidebar"] {
-        background-color: #111111;
-    }
-
-    [data-testid="stSidebar"] > div:first-child {
-        background-color: #111111;
-    }
-
-    [data-testid="stSidebar"] * {
-        color: #F5F5F5;
-    }
-
-    [data-testid="stSidebarNav"] {
-        background-color: #111111;
+        background-color: #0B0B0B !important;
     }
 
     [data-testid="stToolbar"] {
-        background-color: #0B0B0B;
+        background-color: #0B0B0B !important;
     }
 
-    .main {
-        background-color: #0B0B0B;
+    /* ==================================================
+       SIDEBAR
+       ================================================== */
+
+    [data-testid="stSidebar"],
+    [data-testid="stSidebar"] > div:first-child,
+    [data-testid="stSidebarNav"] {
+        background-color: #111111 !important;
     }
 
-    .block-container {
-        background-color: #0B0B0B;
+    [data-testid="stSidebar"] * {
+        color: #F5F5F5 !important;
     }
 
-    /* Metrics */
+    /* ==================================================
+       TEXT
+       ================================================== */
+
+    body,
+    p,
+    span,
+    label,
+    div {
+        color: #F5F5F5;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color: #FFFFFF !important;
+    }
+
+    a {
+        color: #8AB4F8 !important;
+    }
+
+    /* ==================================================
+       METRICS
+       ================================================== */
+
     [data-testid="stMetric"] {
-        background-color: #151515;
-        border-radius: 10px;
-        padding: 12px;
+        background-color: #151515 !important;
+        border: 1px solid #2A2A2A !important;
+        border-radius: 10px !important;
+        padding: 12px !important;
     }
 
     [data-testid="stMetricValue"] {
@@ -90,32 +109,187 @@ st.markdown(
         color: #D1D5DB !important;
     }
 
-    /* Headings */
-    h1, h2, h3, h4, h5, h6 {
-        color: #FFFFFF !important;
+    [data-testid="stMetricDelta"] {
+        color: #D1D5DB !important;
     }
+
+    /* ==================================================
+       DATAFRAMES / TABLES
+       ================================================== */
+
+    [data-testid="stDataFrame"],
+    [data-testid="stDataEditor"] {
+        background-color: #151515 !important;
+        color: #F5F5F5 !important;
+        border: 1px solid #2A2A2A !important;
+        border-radius: 8px !important;
+    }
+
+    [data-testid="stDataFrame"] > div,
+    [data-testid="stDataEditor"] > div {
+        background-color: #151515 !important;
+    }
+
+    [data-testid="stDataFrame"] iframe {
+        background-color: #151515 !important;
+    }
+
+    /* ==================================================
+       INPUTS
+       ================================================== */
 
     [data-testid="stTextInput"] input,
     [data-testid="stNumberInput"] input,
-    [data-testid="stTextArea"] textarea,
-    [data-testid="stSelectbox"] div,
-    [data-testid="stMultiSelect"] div {
-        background-color: #181818;
-        color: #F5F5F5;
+    [data-testid="stTextArea"] textarea {
+        background-color: #181818 !important;
+        color: #F5F5F5 !important;
+        border: 1px solid #333333 !important;
     }
 
+    [data-testid="stTextInput"] input::placeholder,
+    [data-testid="stNumberInput"] input::placeholder,
+    [data-testid="stTextArea"] textarea::placeholder {
+        color: #888888 !important;
+    }
+
+    /* ==================================================
+       SELECTBOX / MULTISELECT
+       ================================================== */
+
+    [data-testid="stSelectbox"] > div,
+    [data-testid="stMultiSelect"] > div {
+        background-color: #181818 !important;
+        color: #F5F5F5 !important;
+    }
+
+    [data-baseweb="select"] > div {
+        background-color: #181818 !important;
+        color: #F5F5F5 !important;
+        border-color: #333333 !important;
+    }
+
+    [data-baseweb="select"] input {
+        color: #F5F5F5 !important;
+    }
+
+    [data-baseweb="popover"] {
+        background-color: #181818 !important;
+        color: #F5F5F5 !important;
+    }
+
+    [role="option"] {
+        background-color: #181818 !important;
+        color: #F5F5F5 !important;
+    }
+
+    [role="option"]:hover {
+        background-color: #252525 !important;
+    }
+
+    /* ==================================================
+       FILE UPLOADER
+       ================================================== */
+
     [data-testid="stFileUploader"] {
-        background-color: #151515;
-        border-radius: 10px;
+        background-color: #151515 !important;
+        border: 1px solid #2A2A2A !important;
+        border-radius: 10px !important;
     }
 
     [data-testid="stFileUploader"] * {
-        color: #F5F5F5;
+        color: #F5F5F5 !important;
     }
 
+    /* ==================================================
+       BUTTONS
+       ================================================== */
+
     button {
-        color: #F5F5F5;
+        color: #F5F5F5 !important;
+        background-color: #181818 !important;
+        border-color: #333333 !important;
     }
+
+    button:hover {
+        background-color: #252525 !important;
+        border-color: #555555 !important;
+    }
+
+    /* ==================================================
+       EXPANDERS
+       ================================================== */
+
+    [data-testid="stExpander"] {
+        background-color: #151515 !important;
+        border: 1px solid #2A2A2A !important;
+        border-radius: 8px !important;
+    }
+
+    [data-testid="stExpander"] * {
+        color: #F5F5F5 !important;
+    }
+
+    /* ==================================================
+       TABS
+       ================================================== */
+
+    [data-baseweb="tab-list"] {
+        background-color: #0B0B0B !important;
+    }
+
+    [data-baseweb="tab"] {
+        color: #D1D5DB !important;
+        background-color: #0B0B0B !important;
+    }
+
+    [aria-selected="true"] {
+        color: #FFFFFF !important;
+    }
+
+    /* ==================================================
+       ALERTS / STATUS BOXES
+       ================================================== */
+
+    [data-testid="stAlert"] {
+        background-color: #151515 !important;
+        color: #F5F5F5 !important;
+        border: 1px solid #2A2A2A !important;
+    }
+
+    /* ==================================================
+       CODE BLOCKS
+       ================================================== */
+
+    [data-testid="stCodeBlock"] {
+        background-color: #151515 !important;
+        border: 1px solid #2A2A2A !important;
+    }
+
+    /* ==================================================
+       DIVIDERS
+       ================================================== */
+
+    hr {
+        border-color: #2A2A2A !important;
+    }
+
+    /* ==================================================
+       WORKFLOW / CUSTOM CARDS
+       ================================================== */
+
+    .workflow-card {
+        background-color: #151515 !important;
+        border: 1px solid #2A2A2A !important;
+        color: #F5F5F5 !important;
+    }
+
+    .workflow-number,
+    .workflow-title,
+    .workflow-description,
+    .workflow-arrow {
+        color: #F5F5F5 !important;
+    }
+
     </style>
     """,
     unsafe_allow_html=True,
