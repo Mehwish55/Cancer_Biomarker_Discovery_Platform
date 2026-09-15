@@ -28,6 +28,80 @@ st.set_page_config(
 
 
 # ==================================================
+# GLOBAL ONCONEXA DARK THEME
+# ==================================================
+
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #0B0B0B;
+        color: #F5F5F5;
+    }
+
+    [data-testid="stAppViewContainer"] {
+        background-color: #0B0B0B;
+    }
+
+    [data-testid="stHeader"] {
+        background-color: #0B0B0B;
+    }
+
+    [data-testid="stSidebar"] {
+        background-color: #111111;
+    }
+
+    [data-testid="stSidebar"] > div:first-child {
+        background-color: #111111;
+    }
+
+    [data-testid="stSidebar"] * {
+        color: #F5F5F5;
+    }
+
+    [data-testid="stSidebarNav"] {
+        background-color: #111111;
+    }
+
+    [data-testid="stToolbar"] {
+        background-color: #0B0B0B;
+    }
+
+    .main {
+        background-color: #0B0B0B;
+    }
+
+    .block-container {
+        background-color: #0B0B0B;
+    }
+
+    [data-testid="stTextInput"] input,
+    [data-testid="stNumberInput"] input,
+    [data-testid="stTextArea"] textarea,
+    [data-testid="stSelectbox"] div,
+    [data-testid="stMultiSelect"] div {
+        background-color: #181818;
+        color: #F5F5F5;
+    }
+
+    [data-testid="stFileUploader"] {
+        background-color: #151515;
+        border-radius: 10px;
+    }
+
+    [data-testid="stFileUploader"] * {
+        color: #F5F5F5;
+    }
+
+    button {
+        color: #F5F5F5;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ==================================================
 # DATA LOADING
 # ==================================================
 
@@ -236,74 +310,6 @@ elif section == "🏠 Overview":
     st.markdown(
         """
         <style>
-        /* OncoNexa dark theme */
-        .stApp {
-            background-color: #0B0B0B;
-            color: #F5F5F5;
-        }
-
-        [data-testid="stAppViewContainer"] {
-            background-color: #0B0B0B;
-        }
-
-        [data-testid="stHeader"] {
-            background-color: #0B0B0B;
-        }
-
-        [data-testid="stSidebar"] {
-            background-color: #111111;
-        }
-
-        [data-testid="stSidebar"] > div:first-child {
-            background-color: #111111;
-        }
-
-        [data-testid="stSidebar"] * {
-            color: #F5F5F5;
-        }
-
-        [data-testid="stSidebarNav"] {
-            background-color: #111111;
-        }
-
-        [data-testid="stToolbar"] {
-            background-color: #0B0B0B;
-        }
-
-        .main {
-            background-color: #0B0B0B;
-        }
-
-        section[data-testid="stSidebar"] {
-            background-color: #111111;
-        }
-
-        .block-container {
-            background-color: #0B0B0B;
-        }
-
-        [data-testid="stTextInput"] input,
-        [data-testid="stNumberInput"] input,
-        [data-testid="stTextArea"] textarea,
-        [data-testid="stSelectbox"] div,
-        [data-testid="stMultiSelect"] div {
-            background-color: #181818;
-            color: #F5F5F5;
-        }
-
-        [data-testid="stFileUploader"] {
-            background-color: #151515;
-            border-radius: 10px;
-        }
-
-        [data-testid="stFileUploader"] * {
-            color: #F5F5F5;
-        }
-
-        button {
-            color: #F5F5F5;
-        }
-
         .workflow-card {
             border: 1px solid rgba(128, 128, 128, 0.35);
             border-radius: 12px;
