@@ -25,7 +25,7 @@ def show_differential_expression(deg):
             str(raw_cancer_type).strip()
             if raw_cancer_type is not None
             and str(raw_cancer_type).strip()
-            else "Customer Cancer Dataset"
+            else "Uploaded Dataset"
         )
 
         raw_comparison = customer_context.comparison
@@ -52,7 +52,7 @@ def show_differential_expression(deg):
 
             **Comparison:** {comparison_label}
 
-            This analysis uses your uploaded customer dataset and the
+            This analysis uses your uploaded dataset and the
             OncoNexa differential expression pipeline.
             """
         )
@@ -710,7 +710,7 @@ def show_differential_expression(deg):
     ).encode("utf-8")
 
     download_name = (
-        "customer_filtered_DEG_results.csv"
+        "filtered_DEG_results.csv"
         if is_customer_analysis
         else "LUAD_filtered_DEG_results.csv"
     )

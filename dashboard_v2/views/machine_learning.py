@@ -12,7 +12,7 @@ def _show_customer_ml(customer_context):
 
     st.markdown(
         f"""
-        ### Machine Learning Analysis — {customer_context.cancer_type}
+        ### Machine Learning Analysis
 
         Machine learning analysis based on the biomarkers identified from
         the uploaded dataset.
@@ -300,7 +300,7 @@ def show_machine_learning(data):
     """
     Machine Learning evidence page.
 
-    Customer analyses use the uploaded dataset and the customer ML engine.
+    This analysis uses the uploaded dataset and the machine-learning engine.
     Existing V1/LUAD outputs remain available as the fallback.
     """
 

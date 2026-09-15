@@ -10,10 +10,10 @@ def _show_customer_roc(customer_context):
 
     st.markdown(
         f"""
-        ### Biomarker ROC Analysis — {customer_context.cancer_type}
+        ### Biomarker ROC Analysis
 
         Evaluation of discriminatory performance for candidate biomarkers
-        within the uploaded customer dataset.
+        within the uploaded dataset.
 
         **Comparison:** {customer_context.comparison}
 
@@ -52,11 +52,11 @@ def _show_customer_roc(customer_context):
             ] = customer_context.analysis_id
 
     except Exception as exc:
-        st.error(f"Customer ROC analysis could not be calculated: {exc}")
+        st.error(f"Biomarker ROC analysis could not be calculated: {exc}")
         return
 
     if roc.empty:
-        st.warning("No customer biomarkers could be evaluated by ROC analysis.")
+        st.warning("No biomarker candidates could be evaluated by ROC analysis.")
         return
 
     st.subheader("📊 ROC Summary")
@@ -161,7 +161,7 @@ def _show_customer_roc(customer_context):
         "Independent validation requires a separate cohort."
     )
 
-    st.subheader("📥 Download Customer ROC Results")
+    st.subheader("📥 Download ROC/AUC Results")
 
     csv = roc.to_csv(index=False).encode("utf-8")
 
@@ -170,7 +170,7 @@ def _show_customer_roc(customer_context):
         data=csv,
         file_name=(
             f"{customer_context.cancer_type}_"
-            "customer_ROC_AUC_results.csv"
+            "ROC_AUC_results.csv"
         ),
         mime="text/csv",
     )

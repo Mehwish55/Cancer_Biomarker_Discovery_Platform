@@ -244,7 +244,7 @@ def _show_customer_pathway_analysis(customer_context):
         f"""
         Explore biological pathway enrichment associated with
         biomarker candidates identified from the uploaded
-        **{customer_context.cancer_type}** dataset.
+        the uploaded dataset.
 
         **Comparison:** {customer_context.comparison}
 

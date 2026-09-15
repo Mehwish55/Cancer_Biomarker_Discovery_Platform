@@ -312,7 +312,7 @@ def build_customer_report(
         leftMargin=18 * mm,
         topMargin=18 * mm,
         bottomMargin=18 * mm,
-        title="OncoNexa Customer Biomarker Analysis Report",
+        title="OncoNexa Biomarker Analysis Report",
         author="OncoNexa",
     )
 
@@ -321,7 +321,7 @@ def build_customer_report(
 
     cancer_type = _clean(
         getattr(customer_context, "cancer_type", None),
-        "Customer Cancer Dataset",
+        "Uploaded Dataset",
     )
 
     comparison = _clean(
@@ -684,7 +684,7 @@ def build_customer_report(
         story.append(
             Paragraph(
                 "ROC/AUC results are calculated within the uploaded "
-                "customer dataset and should not be interpreted as "
+                "uploaded dataset and should not be interpreted as "
                 "independent-cohort validation.",
                 styles["body"],
             )

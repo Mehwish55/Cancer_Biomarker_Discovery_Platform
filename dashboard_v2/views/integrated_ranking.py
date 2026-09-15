@@ -13,19 +13,18 @@ def _show_customer_integrated_ranking(customer_context):
     st.markdown(
         f"""
         Explore the integrated evidence-based ranking of biomarkers
-        identified from the uploaded **{customer_context.cancer_type}**
-        dataset.
+        identified from the uploaded dataset.
 
         **Comparison:** {customer_context.comparison}
 
         The ranking integrates differential-expression, ROC/AUC,
         machine-learning, stability, and functional-biology evidence
-        calculated from this customer analysis.
+        calculated from this analysis.
         """
     )
 
     st.info(
-        "Customer-specific evidence is used for this ranking. "
+        "Evidence from this analysis is used for this ranking. "
         "Reference LUAD results are not mixed into the analysis."
     )
 
@@ -39,7 +38,7 @@ def _show_customer_integrated_ranking(customer_context):
 
     if deg is None or deg.empty:
         st.warning(
-            "Customer differential-expression results are not available."
+            "Differential-expression results are not available."
         )
         return
 
@@ -145,13 +144,13 @@ def _show_customer_integrated_ranking(customer_context):
         )
     except Exception as exc:
         st.error(
-            f"Customer integrated ranking could not be calculated: {exc}"
+            f"Integrated ranking could not be calculated: {exc}"
         )
         return
 
     if ranking is None or ranking.empty:
         st.warning(
-            "No customer biomarkers could be ranked from the "
+            "No biomarker candidates could be ranked from the "
             "available evidence."
         )
         return
@@ -318,7 +317,7 @@ def _show_customer_integrated_ranking(customer_context):
             x="integrated_score",
             y="gene_name",
             orientation="h",
-            title="Customer Biomarker Integrated Evidence Score",
+            title="Integrated Biomarker Evidence Score",
             hover_data=[
                 column
                 for column in [
@@ -476,11 +475,11 @@ def _show_customer_integrated_ranking(customer_context):
     # METHODOLOGY
     # ==================================================
 
-    st.subheader("🧠 How the Customer Ranking Works")
+    st.subheader("🧠 How the Integrated Ranking Works")
 
     st.markdown(
         """
-        The customer integrated ranking combines available evidence
+        The integrated ranking combines available evidence
         calculated from the uploaded dataset.
 
         **Evidence weighting**
@@ -518,7 +517,7 @@ def _show_static_integrated_ranking(data):
     st.info(
         "This is the reference/demo analysis. "
         "Upload a dataset through New Analysis to generate "
-        "a customer-specific integrated ranking."
+        "an integrated biomarker ranking."
     )
 
     st.divider()

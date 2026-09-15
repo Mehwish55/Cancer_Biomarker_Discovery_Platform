@@ -41,7 +41,7 @@ def _show_customer_evidence(customer_context):
         your uploaded cancer expression dataset.
 
         The evidence shown here is retrieved directly from the
-        current customer analysis pipeline.
+        current analysis pipeline.
         """
     )
 
@@ -82,7 +82,7 @@ def _show_customer_evidence(customer_context):
         or "gene_name" not in differential_expression.columns
     ):
         st.warning(
-            "No customer differential-expression results are available."
+            "No differential-expression results are available."
         )
         return
 
@@ -194,7 +194,7 @@ def _show_customer_evidence(customer_context):
         )
 
     if not genes:
-        st.error("No customer biomarker candidates are available.")
+        st.error("No biomarker candidates are available.")
         return
 
     selected_gene = st.selectbox(
@@ -228,7 +228,7 @@ def _show_customer_evidence(customer_context):
     st.header(f"🔬 {selected_gene}")
 
     st.caption(
-        f"Customer analysis: {customer_context.analysis_id}"
+        f"Analysis ID: {customer_context.analysis_id}"
     )
 
     # --------------------------------------------------
@@ -548,7 +548,7 @@ def _show_customer_evidence(customer_context):
         )
 
     st.caption(
-        "Data provenance: current customer analysis outputs • "
+        "Data provenance: current analysis outputs • "
         "OncoNexa evidence presentation layer"
     )
 
@@ -565,10 +565,6 @@ def show_evidence_explorer(data):
         "onconexa_customer_context"
     )
 
-    st.sidebar.write(
-        "DEBUG customer context:",
-        customer_context is not None,
-    )
     st.sidebar.write(
         "DEBUG analysis results:",
         "onconexa_analysis_results" in st.session_state,

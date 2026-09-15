@@ -21,14 +21,14 @@ def _show_customer_biomarker_explorer(customer_context):
     st.markdown(
         f"""
         Explore candidate biomarkers identified from the uploaded
-        **{customer_context.cancer_type}** dataset.
+        the uploaded dataset.
 
         **Comparison:** {customer_context.comparison}
         """
     )
 
     st.caption(
-        "Customer-specific evidence is shown below. "
+        "Evidence from this analysis is shown below. "
         "Reference LUAD evidence is not mixed into this analysis."
     )
 
@@ -44,7 +44,7 @@ def _show_customer_biomarker_explorer(customer_context):
 
     if "gene" not in deg.columns:
         st.error(
-            "Customer differential-expression results do not contain "
+            "Differential-expression results do not contain "
             "the expected gene column."
         )
         return
@@ -394,7 +394,7 @@ def _show_customer_biomarker_explorer(customer_context):
 
                     st.caption(
                         f"Expression of {selected_gene} across "
-                        "the two customer-defined groups."
+                        "the two analysis groups."
                     )
 
                     # Group-wise boxplot using Plotly.
@@ -407,7 +407,7 @@ def _show_customer_biomarker_explorer(customer_context):
                         points="all",
                         hover_data=["Sample"],
                         labels={
-                            "Group": "Customer Group",
+                            "Group": "Analysis Group",
                             "Expression": (
                                 f"{selected_gene} Expression"
                             ),
@@ -623,7 +623,7 @@ def _show_customer_biomarker_explorer(customer_context):
                 st.caption(
                     "Differential-expression effect size and "
                     "statistical significance for the uploaded "
-                    "customer dataset."
+                    "uploaded dataset."
                 )
 
                 import plotly.express as px
