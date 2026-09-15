@@ -268,6 +268,28 @@ elif section == "🏠 Overview":
     st.markdown(
         """
         <style>
+        /* OncoNexa dark theme */
+        .stApp {
+            background-color: #0B0B0B;
+            color: #F5F5F5;
+        }
+
+        [data-testid="stSidebar"] {
+            background-color: #050505;
+        }
+
+        [data-testid="stHeader"] {
+            background-color: #0B0B0B;
+        }
+
+        [data-testid="stToolbar"] {
+            background-color: #0B0B0B;
+        }
+
+        .main {
+            background-color: #0B0B0B;
+        }
+
         .workflow-card {
             border: 1px solid rgba(128, 128, 128, 0.35);
             border-radius: 12px;
