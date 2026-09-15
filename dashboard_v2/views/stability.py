@@ -9,12 +9,24 @@ def _show_customer_stability(customer_context):
 
     st.title("🔬 Biomarker Stability Analysis")
 
+    cancer_type = (
+        str(customer_context.cancer_type).strip()
+        if customer_context.cancer_type
+        else "the uploaded dataset"
+    )
+
+    comparison = (
+        str(customer_context.comparison).strip()
+        if customer_context.comparison
+        else "Group comparison"
+    )
+
     st.markdown(
         f"""
-        Evaluate the consistency of biomarker prioritization for
-        **{customer_context.cancer_type}**.
+        Evaluate the consistency and reproducibility of biomarker
+        prioritization for **{cancer_type}**.
 
-        **Comparison:** {customer_context.comparison}
+        **Comparison:** {comparison}
 
         Stability is calculated from repeated within-dataset
         resampling of the uploaded expression data.
@@ -37,17 +49,20 @@ def _show_customer_stability(customer_context):
         ):
             result = cached_result
         else:
-            result = run_customer_stability(
-                expression_data=customer_context.expression_data,
-                metadata=customer_context.metadata,
-                differential_expression=(
-                    customer_context.differential_expression
-                ),
-                gene_column=customer_context.gene_column,
-                sample_columns=customer_context.sample_columns,
-                n_iterations=50,
-                random_state=42,
-            )
+            with st.spinner(
+                "Running biomarker stability analysis..."
+            ):
+                result = run_customer_stability(
+                    expression_data=customer_context.expression_data,
+                    metadata=customer_context.metadata,
+                    differential_expression=(
+                        customer_context.differential_expression
+                    ),
+                    gene_column=customer_context.gene_column,
+                    sample_columns=customer_context.sample_columns,
+                    n_iterations=50,
+                    random_state=42,
+                )
 
             st.session_state[
                 "onconexa_customer_stability_results"
@@ -227,13 +242,23 @@ def _show_customer_stability(customer_context):
 
     csv_data = stability.to_csv(index=False).encode("utf-8")
 
+    safe_cancer_type = (
+        str(customer_context.cancer_type).strip()
+        if customer_context.cancer_type
+        else "onconexa"
+    )
+
+    safe_cancer_type = (
+        safe_cancer_type
+        .replace(" ", "_")
+        .replace("/", "_")
+        .replace("\\", "_")
+    )
+
     st.download_button(
         "📥 Download Stability Results",
         data=csv_data,
-        file_name=(
-            f"{customer_context.cancer_type}"
-            "_stability_results.csv"
-        ),
+        file_name=f"{safe_cancer_type}_stability_results.csv",
         mime="text/csv",
     )
 
