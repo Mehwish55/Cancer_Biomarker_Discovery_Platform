@@ -75,32 +75,19 @@ st.markdown(
         background-color: #0B0B0B;
     }
 
-    /* Global readable text */
-    [data-testid="stAppViewContainer"] *,
-    .stMarkdown,
-    .stText,
-    label,
-    p,
-    span,
-    div {
-        color: #F5F5F5;
-    }
-
-    /* Metrics and numbers */
+    /* Metrics */
     [data-testid="stMetric"] {
         background-color: #151515;
         border-radius: 10px;
         padding: 12px;
     }
 
-    [data-testid="stMetricValue"],
-    [data-testid="stMetricLabel"],
-    [data-testid="stMetricDelta"] {
-        color: #F5F5F5 !important;
+    [data-testid="stMetricValue"] {
+        color: #FFFFFF !important;
     }
 
-    [data-testid="stMetricValue"] div {
-        color: #FFFFFF !important;
+    [data-testid="stMetricLabel"] {
+        color: #D1D5DB !important;
     }
 
     /* Headings */
