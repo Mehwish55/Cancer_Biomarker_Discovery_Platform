@@ -13,6 +13,7 @@ from views.integrated_ranking import show_integrated_ranking
 from views.differential_expression import show_differential_expression
 from views.roc_validation import show_roc_validation
 from views.data_upload import show_data_upload
+from views.pricing import show_pricing
 
 # ==================================================
 # PAGE CONFIGURATION
@@ -114,6 +115,7 @@ section = st.sidebar.radio(
         "🔎 Evidence Explorer",
         "💡 AI Biomarker Assistant",
         "📥 Downloads",
+        "💼 Pricing & Services",
     ],
 )
 
@@ -157,7 +159,6 @@ def metric_value(df, column, default=0):
 if section == "🚀 New Analysis":
 
     from views.data_upload import show_data_upload
-
     show_data_upload()
 
 elif section == "🏠 Overview":
@@ -334,7 +335,7 @@ elif section == "🏠 Overview":
 
         **Ready to analyze your own data?** Use **🚀 New Analysis**
         in the sidebar to upload your expression matrix and sample
-        metadata for a customer-specific analysis.
+        metadata for an analysis.
         """
     )
 
@@ -405,7 +406,7 @@ elif section == "🏠 Overview":
 
     st.info(
         "Free demonstration: TCGA-LUAD. "
-        "Customer analyses can be performed using uploaded cancer expression "
+        "Analyses can be performed using uploaded cancer expression "
         "data and sample metadata."
     )
 
@@ -595,7 +596,7 @@ elif section == "📥 Downloads":
     if customer_context is None:
 
         st.info(
-            "Upload a customer dataset and complete an analysis "
+            "Upload your dataset and complete an analysis "
             "to generate the OncoNexa report and downloadable results."
         )
 
@@ -603,7 +604,7 @@ elif section == "📥 Downloads":
 
         cancer_type = (
             getattr(customer_context, "cancer_type", None)
-            or "Customer Cancer Dataset"
+            or "Uploaded Dataset"
         )
 
         comparison = (
@@ -618,7 +619,7 @@ elif section == "📥 Downloads":
 
         st.markdown(
             f"""
-            ### Customer Analysis Report
+            ### OncoNexa Analysis Report
 
             **Cancer / Dataset:** {cancer_type}  
             **Comparison:** {comparison}  
@@ -636,7 +637,7 @@ elif section == "📥 Downloads":
 
         st.markdown(
             """
-            Generate a professional customer-facing PDF containing
+            Generate a professional PDF containing
             the key findings from your OncoNexa biomarker analysis.
             """
         )
@@ -775,6 +776,15 @@ elif section == "📥 Downloads":
             st.info(
                 "No downloadable analysis result tables are currently available."
             )
+
+
+# ==================================================
+# PRICING & SERVICES
+# ==================================================
+
+elif section == "💼 Pricing & Services":
+
+    show_pricing()
 
 
 # ==================================================
