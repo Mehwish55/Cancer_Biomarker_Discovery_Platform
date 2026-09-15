@@ -75,6 +75,39 @@ st.markdown(
         background-color: #0B0B0B;
     }
 
+    /* Global readable text */
+    [data-testid="stAppViewContainer"] *,
+    .stMarkdown,
+    .stText,
+    label,
+    p,
+    span,
+    div {
+        color: #F5F5F5;
+    }
+
+    /* Metrics and numbers */
+    [data-testid="stMetric"] {
+        background-color: #151515;
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+    [data-testid="stMetricValue"],
+    [data-testid="stMetricLabel"],
+    [data-testid="stMetricDelta"] {
+        color: #F5F5F5 !important;
+    }
+
+    [data-testid="stMetricValue"] div {
+        color: #FFFFFF !important;
+    }
+
+    /* Headings */
+    h1, h2, h3, h4, h5, h6 {
+        color: #FFFFFF !important;
+    }
+
     [data-testid="stTextInput"] input,
     [data-testid="stNumberInput"] input,
     [data-testid="stTextArea"] textarea,
