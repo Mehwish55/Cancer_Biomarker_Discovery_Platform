@@ -556,23 +556,11 @@ elif section == "🏠 Overview":
     # --------------------------------------------------
 
     st.markdown(
-        """
-        <div class="onco-hero">
-            <div class="onco-eyebrow">ONCONEXA · BIOMARKER DISCOVERY</div>
-
-            <div class="onco-hero-title">
-                AI-Powered Pan-Cancer<br>
-                Biomarker Discovery
-            </div>
-
-            <div class="onco-hero-text">
-                From molecular data to evidence-supported biomarker candidates.
-                OncoNexa integrates statistical analysis, machine learning,
-                validation, stability assessment, and biological interpretation
-                into one streamlined research workflow.
-            </div>
-        </div>
-        """,
+        """<div class="onco-hero">
+<div class="onco-eyebrow">🧬 OncoNexa</div>
+<div class="onco-hero-title">AI-Powered Pan-Cancer<br>Biomarker Discovery</div>
+<div class="onco-hero-text">From molecular data to evidence-supported biomarker candidates. OncoNexa integrates statistical analysis, machine learning, validation, stability assessment, and biological interpretation into one streamlined research workflow.</div>
+</div>""",
         unsafe_allow_html=True,
     )
 
@@ -785,19 +773,10 @@ elif section == "🏠 Overview":
     # --------------------------------------------------
 
     st.markdown(
-        """
-        <div class="onco-cta">
-            <div class="onco-cta-title">
-                Ready to analyze your own cancer dataset?
-            </div>
-
-            <div class="onco-cta-text">
-                Upload your expression matrix and sample metadata to
-                run a customer-specific biomarker discovery workflow
-                through OncoNexa.
-            </div>
-        </div>
-        """,
+        """<div class="onco-cta">
+<div class="onco-cta-title">Ready to analyze your own cancer dataset?</div>
+<div class="onco-cta-text">Upload your expression matrix and sample metadata to run a customer-specific biomarker discovery workflow through OncoNexa.</div>
+</div>""",
         unsafe_allow_html=True,
     )
 
