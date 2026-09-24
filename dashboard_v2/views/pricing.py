@@ -19,23 +19,23 @@ def show_pricing():
     st.divider()
 
     # ==================================================
-    # FREE DEMO
+    # EXPLORE ONCONEXA
     # ==================================================
 
-    st.subheader("🆓 Free Demo")
+    st.subheader("🆓 Explore OncoNexa")
 
     st.markdown("### €0")
 
     st.markdown(
         """
         Explore the OncoNexa biomarker discovery workflow using
-        an example cancer dataset.
+        a preloaded reference dataset.
 
         **Includes**
-        - Example LUAD dataset
+        - Preloaded reference analysis
         - Biomarker discovery workflow
         - Example validation results
-        - Example visualizations
+        - Interactive visualizations
         """
     )
 
@@ -50,73 +50,165 @@ def show_pricing():
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.markdown("## Essential")
-        st.markdown("### €200")
-        st.caption("Initial biomarker discovery")
+        with st.container(border=True):
+            st.markdown("## Essential")
+            st.markdown("### €200")
+            st.caption("Initial biomarker discovery")
 
-        st.markdown(
-            """
-            **Includes**
-            - Differential expression
-            - Biomarker candidate discovery
-            - Basic ROC/AUC analysis
-            - Pathway analysis
-            - Results tables
-            - Summary report
-            """
-        )
+            st.markdown(
+                """
+                **Includes**
+                - Differential expression
+                - Biomarker candidate discovery
+                - Basic ROC/AUC analysis
+                - Pathway analysis
+                - Results tables
+                - Summary report
+                """
+            )
 
-        st.button(
-            "Request Essential Analysis",
-            key="pricing_essential",
-            disabled=True,
-        )
+            st.markdown(
+                '<div style="height: 24px;"></div>',
+                unsafe_allow_html=True,
+            )
+
+            if st.button(
+                "Request Essential Analysis",
+                key="pricing_essential",
+                use_container_width=True,
+            ):
+                st.session_state["pricing_request"] = "Essential"
 
     with col2:
-        st.markdown("## ⭐ Advanced")
-        st.markdown("### €500")
-        st.caption("Complete biomarker discovery & validation")
+        with st.container(border=True):
+            st.markdown("## ⭐ Advanced")
+            st.markdown("### €500")
+            st.caption("Complete biomarker discovery & validation")
 
-        st.markdown(
-            """
-            **Includes everything in Essential, plus**
-            - ROC/AUC validation
-            - Machine learning
-            - Stability analysis
-            - Evidence integration
-            - Integrated biomarker ranking
-            - Professional PDF report
-            """
-        )
+            st.markdown(
+                """
+                **Includes everything in Essential, plus**
+                - ROC/AUC validation
+                - Machine learning
+                - Stability analysis
+                - Evidence integration
+                - Integrated biomarker ranking
+                - Professional PDF report
+                """
+            )
 
-        st.button(
-            "Request Advanced Analysis",
-            key="pricing_advanced",
-            disabled=True,
-        )
+            st.markdown(
+                '<div style="height: 24px;"></div>',
+                unsafe_allow_html=True,
+            )
+
+            if st.button(
+                "Request Advanced Analysis",
+                key="pricing_advanced",
+                use_container_width=True,
+            ):
+                st.session_state["pricing_request"] = "Advanced"
 
     with col3:
-        st.markdown("## 🧬 Custom Research")
-        st.markdown("### From €1,000")
-        st.caption("Complex or customized projects")
+        with st.container(border=True):
+            st.markdown("## 🧬 Custom Research")
+            st.markdown("### From €1,000")
+            st.caption("Complex or customized projects")
+
+            st.markdown(
+                """
+                **Suitable for**
+                - Large datasets
+                - Multiple comparisons
+                - Custom workflows
+                - Additional validation
+                - Research-specific analysis
+                - Customized reporting
+                """
+            )
+
+            st.markdown(
+                '<div style="height: 24px;"></div>',
+                unsafe_allow_html=True,
+            )
+
+            if st.button(
+                "Request Custom Analysis",
+                key="pricing_custom",
+                use_container_width=True,
+            ):
+                st.session_state["pricing_request"] = "Custom Research"
+
+    if st.session_state.get("pricing_request"):
+        st.divider()
+
+        selected_package = st.session_state["pricing_request"]
+
+        st.subheader(f"📩 Request {selected_package}")
 
         st.markdown(
-            """
-            **Suitable for**
-            - Large datasets
-            - Multiple comparisons
-            - Custom workflows
-            - Additional validation
-            - Research-specific analysis
-            - Customized reporting
-            """
+            "Tell us about your project and dataset. "
+            "We will review your requirements and determine the appropriate workflow."
         )
 
-        st.button(
-            "Request Custom Analysis",
-            key="pricing_custom",
-            disabled=True,
-        )
+        with st.form("onconexa_analysis_request_form"):
+            name = st.text_input("Name *")
+            organization = st.text_input("Organization")
+            email = st.text_input("Email *")
+
+            col_a, col_b = st.columns(2)
+
+            with col_a:
+                data_type = st.selectbox(
+                    "Data type",
+                    [
+                        "Bulk RNA-seq / Gene Expression",
+                        "Single-cell RNA-seq",
+                        "Proteomics",
+                        "Genomics / Variant Data",
+                        "Multi-omics",
+                        "Other",
+                    ],
+                )
+
+            with col_b:
+                dataset_size = st.text_input(
+                    "Dataset size",
+                    placeholder="e.g. 500 samples × 20,000 genes",
+                )
+
+            cancer_type = st.text_input(
+                "Cancer / disease area",
+                placeholder="e.g. lung cancer, breast cancer",
+            )
+
+            project_description = st.text_area(
+                "Project description *",
+                placeholder=(
+                    "Briefly describe your research question, "
+                    "dataset and the analysis you need."
+                ),
+                height=140,
+            )
+
+            submitted = st.form_submit_button(
+                "Submit Analysis Request",
+                use_container_width=True,
+            )
+
+        if submitted:
+            if not name.strip() or not email.strip() or not project_description.strip():
+                st.error(
+                    "Please complete all required fields marked with *."
+                )
+            else:
+                st.success(
+                    f"Your {selected_package} inquiry has been submitted successfully."
+                )
+                st.info(
+                    "Thank you. Your project requirements have been captured "
+                    "for review of the appropriate OncoNexa analysis workflow."
+                )
 
     st.divider()
 

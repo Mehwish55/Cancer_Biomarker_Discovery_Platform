@@ -243,14 +243,13 @@ def _show_customer_pathway_analysis(customer_context):
     st.markdown(
         f"""
         Explore biological pathway enrichment associated with
-        biomarker candidates identified from the uploaded
-        the uploaded dataset.
+        biomarker candidates identified from the uploaded dataset.
 
         **Comparison:** {customer_context.comparison}
 
         Enrichment is calculated using the uploaded expression
-        genes as the background universe and the differential-
-        expression candidates as the enrichment set.
+        genes as the background universe and the differential-expression
+        candidates as the enrichment set.
         """
     )
 
@@ -374,11 +373,6 @@ def _show_customer_pathway_analysis(customer_context):
 
     st.divider()
 
-    st.caption(
-        "Data provenance: uploaded expression data + "
-        "differential-expression candidates + local "
-        "org.Hs.eg.db / GO.db annotation."
-    )
 
 
 def show_pathway_analysis(data):
@@ -398,11 +392,11 @@ def show_pathway_analysis(data):
 
     st.markdown(
         """
-        Explore biological pathways associated with the LUAD
-        biomarker candidates.
+        Explore biological pathways associated with the biomarker
+        candidates in the preloaded reference analysis.
 
-        Results are derived from the existing V1 pathway-enrichment
-        analysis and are presented without recalculating enrichment.
+        Results are derived from the validated reference
+        pathway-enrichment analysis.
         """
     )
 
@@ -477,8 +471,3 @@ def show_pathway_analysis(data):
         )
 
     st.divider()
-
-    st.caption(
-        "Data provenance: canonical V1 pathway-enrichment outputs • "
-        "V2 presentation layer"
-    )

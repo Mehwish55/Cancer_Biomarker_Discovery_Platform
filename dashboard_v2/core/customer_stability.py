@@ -219,7 +219,7 @@ def run_customer_stability(
             continue
 
         model = RandomForestClassifier(
-            n_estimators=300,
+            n_estimators=100,
             random_state=random_state + iteration,
             class_weight="balanced",
             n_jobs=-1,
@@ -243,7 +243,7 @@ def run_customer_stability(
             X_resampled,
             y_resampled,
             scoring="roc_auc",
-            n_repeats=5,
+            n_repeats=3,
             random_state=random_state + iteration,
             n_jobs=-1,
         )

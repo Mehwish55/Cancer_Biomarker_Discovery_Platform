@@ -439,179 +439,318 @@ if section == "🚀 New Analysis":
 
 elif section == "🏠 Overview":
 
-    st.title("🧬 OncoNexa")
-
-    st.markdown(
-        """
-        ## AI-Powered Cancer Biomarker Discovery
-
-        **From molecular data to evidence-supported biomarker candidates.**
-
-        OncoNexa integrates statistical analysis, machine learning,
-        validation, biomarker stability, and functional biology into
-        one streamlined research workflow.
-        """
-    )
-
-    st.divider()
-
-    st.subheader("🚀 What OncoNexa Does")
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.markdown(
-            """
-            ### 🔬 Discover
-            Identify and prioritize candidate cancer biomarkers
-            from molecular and differential-expression data.
-            """
-        )
-
-    with col2:
-        st.markdown(
-            """
-            ### 🤖 Validate
-            Combine statistical validation, ROC/AUC analysis,
-            machine learning, and biomarker stability.
-            """
-        )
-
-    with col3:
-        st.markdown(
-            """
-            ### 🧬 Interpret
-            Connect candidate biomarkers with biological processes,
-            pathways, and supporting evidence.
-            """
-        )
-
-    st.divider()
-
-    st.subheader("⚙️ Integrated Discovery Workflow")
-
-    workflow = [
-        ("01", "Data Input", "Molecular / expression data"),
-        ("02", "Differential Expression", "Identify significant candidates"),
-        ("03", "Candidate Discovery", "Prioritize biomarker candidates"),
-        ("04", "Validation", "ROC/AUC and independent evidence"),
-        ("05", "Machine Learning", "Feature importance and prediction"),
-        ("06", "Stability", "Assess reproducibility across folds"),
-        ("07", "Functional Biology", "Pathways and biological interpretation"),
-        ("08", "Integrated Ranking", "Generate a prioritized shortlist"),
-    ]
+    # ==================================================
+    # ONCONEXA LANDING PAGE
+    # ==================================================
 
     st.markdown(
         """
         <style>
-        .workflow-card {
-            border: 1px solid rgba(128, 128, 128, 0.35);
-            border-radius: 12px;
-            padding: 18px;
-            min-height: 145px;
-            margin-bottom: 18px;
-            background: rgba(128, 128, 128, 0.06);
+        .onco-hero {
+            padding: 28px 0 18px 0;
         }
 
-        .workflow-number {
-            font-size: 0.85rem;
+        .onco-eyebrow {
+            font-size: 0.82rem;
             font-weight: 700;
-            opacity: 0.75;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.65;
+            margin-bottom: 10px;
+        }
+
+        .onco-hero-title {
+            font-size: 2.65rem;
+            font-weight: 800;
+            line-height: 1.12;
+            margin-bottom: 14px;
+        }
+
+        .onco-hero-text {
+            font-size: 1.08rem;
+            line-height: 1.6;
+            max-width: 850px;
+            opacity: 0.78;
             margin-bottom: 8px;
         }
 
-        .workflow-title {
+        .onco-feature-card {
+            border: 1px solid rgba(128, 128, 128, 0.28);
+            border-radius: 14px;
+            padding: 20px;
+            min-height: 155px;
+            background: rgba(128, 128, 128, 0.055);
+        }
+
+        .onco-feature-icon {
+            font-size: 1.45rem;
+            margin-bottom: 8px;
+        }
+
+        .onco-feature-title {
             font-size: 1.05rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            min-height: 48px;
+            font-weight: 750;
+            margin-bottom: 8px;
         }
 
-        .workflow-description {
+        .onco-feature-text {
             font-size: 0.88rem;
-            line-height: 1.45;
-            opacity: 0.8;
+            line-height: 1.5;
+            opacity: 0.72;
         }
 
-        .workflow-arrow {
-            text-align: center;
-            font-size: 1.4rem;
+        .onco-section-label {
+            font-size: 0.78rem;
+            font-weight: 750;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
             opacity: 0.6;
-            padding-top: 45px;
+            margin-bottom: 5px;
+        }
+
+        .onco-cta {
+            border: 1px solid rgba(128, 128, 128, 0.3);
+            border-radius: 16px;
+            padding: 26px;
+            margin-top: 10px;
+            background: rgba(128, 128, 128, 0.055);
+        }
+
+        .onco-cta-title {
+            font-size: 1.35rem;
+            font-weight: 750;
+            margin-bottom: 8px;
+        }
+
+        .onco-cta-text {
+            font-size: 0.92rem;
+            line-height: 1.55;
+            opacity: 0.75;
+        }
+
+        .module-card {
+            border: 1px solid rgba(128, 128, 128, 0.25);
+            border-radius: 12px;
+            padding: 17px;
+            min-height: 105px;
+            background: rgba(128, 128, 128, 0.045);
+        }
+
+        .module-title {
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .module-description {
+            font-size: 0.84rem;
+            line-height: 1.45;
+            opacity: 0.7;
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    # First workflow row
-    cols = st.columns([1, 0.12, 1, 0.12, 1, 0.12, 1])
-
-    for i, (number, title, description) in enumerate(workflow[:4]):
-        card_col = cols[i * 2]
-
-        with card_col:
-            st.markdown(
-                f"""
-                <div class="workflow-card">
-                    <div class="workflow-number">{number}</div>
-                    <div class="workflow-title">{title}</div>
-                    <div class="workflow-description">{description}</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        if i < 3:
-            with cols[i * 2 + 1]:
-                st.markdown(
-                    '<div class="workflow-arrow">→</div>',
-                    unsafe_allow_html=True,
-                )
-
-    # Second workflow row
-    cols = st.columns([1, 0.12, 1, 0.12, 1, 0.12, 1])
-
-    for i, (number, title, description) in enumerate(workflow[4:]):
-        card_col = cols[i * 2]
-
-        with card_col:
-            st.markdown(
-                f"""
-                <div class="workflow-card">
-                    <div class="workflow-number">{number}</div>
-                    <div class="workflow-title">{title}</div>
-                    <div class="workflow-description">{description}</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        if i < 3:
-            with cols[i * 2 + 1]:
-                st.markdown(
-                    '<div class="workflow-arrow">→</div>',
-                    unsafe_allow_html=True,
-                )
-
-    st.divider()
-
-    st.subheader("📊 OncoNexa Demonstration")
+    # --------------------------------------------------
+    # HERO
+    # --------------------------------------------------
 
     st.markdown(
         """
-        ### Lung Adenocarcinoma — TCGA-LUAD
+        <div class="onco-hero">
+            <div class="onco-eyebrow">ONCONEXA · BIOMARKER DISCOVERY</div>
 
-        Explore a completed OncoNexa biomarker discovery analysis
-        using a validated **lung adenocarcinoma (LUAD)** dataset.
+            <div class="onco-hero-title">
+                AI-Powered Pan-Cancer<br>
+                Biomarker Discovery
+            </div>
 
-        This free demonstration lets visitors explore the platform's
-        biomarker discovery, validation, machine-learning, stability,
-        and biological interpretation capabilities.
+            <div class="onco-hero-text">
+                From molecular data to evidence-supported biomarker candidates.
+                OncoNexa integrates statistical analysis, machine learning,
+                validation, stability assessment, and biological interpretation
+                into one streamlined research workflow.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-        **Ready to analyze your own data?** Use **🚀 New Analysis**
-        in the sidebar to upload your expression matrix and sample
-        metadata for an analysis.
+    cta1, cta2 = st.columns([1, 1])
+
+    with cta1:
+        if st.button(
+            "🚀 Start a New Analysis",
+            use_container_width=True,
+            key="overview_new_analysis",
+        ):
+            st.session_state["section"] = "🚀 New Analysis"
+            st.rerun()
+
+    with cta2:
+        if st.button(
+            "📊 Explore Reference Analysis",
+            use_container_width=True,
+            key="overview_reference_analysis",
+        ):
+            st.session_state["section"] = "🏠 Overview"
+            st.rerun()
+
+    st.divider()
+
+    # --------------------------------------------------
+    # CORE CAPABILITIES
+    # --------------------------------------------------
+
+    st.markdown(
+        '<div class="onco-section-label">CORE CAPABILITIES</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        "### From discovery to biological interpretation"
+    )
+
+    features = [
+        (
+            "🔬",
+            "Discover",
+            "Identify candidate biomarkers from molecular and "
+            "differential-expression data.",
+        ),
+        (
+            "🤖",
+            "Validate",
+            "Combine ROC/AUC analysis, machine learning, "
+            "and biomarker stability assessment.",
+        ),
+        (
+            "🧬",
+            "Interpret",
+            "Connect candidate biomarkers with pathways, "
+            "functional biology, and supporting evidence.",
+        ),
+        (
+            "🏆",
+            "Prioritize",
+            "Integrate multiple evidence layers into a "
+            "structured biomarker shortlist.",
+        ),
+    ]
+
+    cols = st.columns(4)
+
+    for col, (icon, title, description) in zip(cols, features):
+        with col:
+            st.markdown(
+                f"""
+                <div class="onco-feature-card">
+                    <div class="onco-feature-icon">{icon}</div>
+                    <div class="onco-feature-title">{title}</div>
+                    <div class="onco-feature-text">{description}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    st.divider()
+
+    # --------------------------------------------------
+    # WORKFLOW
+    # --------------------------------------------------
+
+    st.markdown(
+        '<div class="onco-section-label">INTEGRATED WORKFLOW</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        "### A structured path from data to candidate biomarkers"
+    )
+
+    workflow = [
+        ("01", "Data Input", "Molecular / expression data"),
+        ("02", "Differential Expression", "Identify significant candidates"),
+        ("03", "Candidate Discovery", "Explore biomarker candidates"),
+        ("04", "Validation", "ROC/AUC and validation evidence"),
+        ("05", "Machine Learning", "Feature importance and prediction"),
+        ("06", "Stability", "Assess reproducibility across folds"),
+        ("07", "Functional Biology", "Pathways and biological interpretation"),
+        ("08", "Integrated Ranking", "Generate a prioritized shortlist"),
+    ]
+
+    cols = st.columns(4)
+
+    for i, (number, title, description) in enumerate(workflow):
+        with cols[i % 4]:
+            st.markdown(
+                f"""
+                <div class="onco-feature-card">
+                    <div class="workflow-number">{number}</div>
+                    <div class="onco-feature-title">{title}</div>
+                    <div class="onco-feature-text">{description}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    st.divider()
+
+    # --------------------------------------------------
+    # PLATFORM MODULES
+    # --------------------------------------------------
+
+    st.markdown(
+        '<div class="onco-section-label">PLATFORM MODULES</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("### Explore the research workflow")
+
+    modules = [
+        ("🧬 Biomarker Explorer", "Explore candidate biomarkers and evidence."),
+        ("📊 Differential Expression", "Inspect differential-expression results."),
+        ("📈 ROC / Validation", "Evaluate diagnostic discrimination."),
+        ("🧠 Machine Learning", "Explore ML-based biomarker evidence."),
+        ("🔬 Biomarker Stability", "Assess reproducibility across validation folds."),
+        ("🧪 Pathway Analysis", "Explore functional and pathway enrichment."),
+        ("🏆 Integrated Ranking", "Review combined biomarker prioritization."),
+        ("💡 AI Research Assistant", "Interact with biomarker evidence through an AI-assisted interface."),
+    ]
+
+    cols = st.columns(2)
+
+    for i, (title, description) in enumerate(modules):
+        with cols[i % 2]:
+            st.markdown(
+                f"""
+                <div class="module-card">
+                    <div class="module-title">{title}</div>
+                    <div class="module-description">{description}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    st.divider()
+
+    # --------------------------------------------------
+    # REFERENCE ANALYSIS
+    # --------------------------------------------------
+
+    st.markdown(
+        '<div class="onco-section-label">REFERENCE ANALYSIS</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("### Explore a completed biomarker discovery analysis")
+
+    st.markdown(
+        """
+        Explore a validated reference analysis and see how OncoNexa
+        connects differential expression, biomarker validation,
+        machine learning, stability, pathway analysis, and integrated
+        prioritization.
         """
     )
 
@@ -628,62 +767,50 @@ elif section == "🏠 Overview":
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.metric(
-            "🧬 Significant DEGs",
-            f"{n_degs:,}",
-        )
+        st.metric("🧬 Significant DEGs", f"{n_degs:,}")
 
     with col2:
-        st.metric(
-            "🔬 Candidates Evaluated",
-            n_candidates,
-        )
+        st.metric("🔬 Candidates Evaluated", n_candidates)
 
     with col3:
-        st.metric(
-            "🏆 Prioritized Biomarkers",
-            n_top,
-        )
+        st.metric("🏆 Prioritized Biomarkers", n_top)
 
     with col4:
-        st.metric(
-            "📈 Best ROC-AUC",
-            f"{best_auc:.3f}",
-        )
+        st.metric("📈 Best ROC-AUC", f"{best_auc:.3f}")
 
     st.divider()
 
-    st.subheader("🧪 Available Research Modules")
+    # --------------------------------------------------
+    # CUSTOMER CTA
+    # --------------------------------------------------
 
-    modules = [
-        ("🧬 Biomarker Explorer", "Explore candidate biomarkers and evidence."),
-        ("📊 Differential Expression", "Inspect differential-expression results."),
-        ("📈 ROC / Validation", "Evaluate diagnostic discrimination."),
-        ("🧠 Machine Learning", "Explore ML-based biomarker evidence."),
-        ("🔬 Biomarker Stability", "Assess reproducibility across validation folds."),
-        ("🧪 Pathway Analysis", "Explore functional and pathway enrichment."),
-        ("🏆 Integrated Ranking", "Review combined biomarker prioritization."),
-        ("💡 AI Research Assistant", "Interact with the evidence through an AI-assisted interface."),
-    ]
+    st.markdown(
+        """
+        <div class="onco-cta">
+            <div class="onco-cta-title">
+                Ready to analyze your own cancer dataset?
+            </div>
 
-    cols = st.columns(2)
+            <div class="onco-cta-text">
+                Upload your expression matrix and sample metadata to
+                run a customer-specific biomarker discovery workflow
+                through OncoNexa.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    for i, (title, description) in enumerate(modules):
-        with cols[i % 2]:
-            st.markdown(
-                f"""
-                **{title}**
+    if st.button(
+        "🚀 Start a New Analysis",
+        use_container_width=True,
+        key="overview_new_analysis_bottom",
+    ):
+        st.session_state["section"] = "🚀 New Analysis"
+        st.rerun()
 
-                {description}
-                """
-            )
-
-    st.divider()
-
-    st.info(
-        "Free demonstration: TCGA-LUAD. "
-        "Analyses can be performed using uploaded cancer expression "
-        "data and sample metadata."
+    st.caption(
+        "A validated reference analysis is available for platform exploration."
     )
 
 # ==================================================

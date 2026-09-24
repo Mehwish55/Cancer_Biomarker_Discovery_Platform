@@ -279,8 +279,7 @@ def show_stability(data):
     """
     Biomarker stability analysis page.
 
-    Uses the existing V1 biomarker_stability.csv output.
-    V2 only visualizes and interprets the existing results.
+    Uses the preloaded reference biomarker stability results.
     """
 
     stability = data.get("stability")

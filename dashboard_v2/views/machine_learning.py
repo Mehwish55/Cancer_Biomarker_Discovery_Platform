@@ -301,7 +301,7 @@ def show_machine_learning(data):
     Machine Learning evidence page.
 
     This analysis uses the uploaded dataset and the machine-learning engine.
-    Existing V1/LUAD outputs remain available as the fallback.
+    Preloaded reference results remain available as the fallback.
     """
 
     customer_context = st.session_state.get(
@@ -318,11 +318,11 @@ def show_machine_learning(data):
     """
     Machine Learning evidence page.
 
-    Uses existing V1 ML outputs:
-    - model_comparison
-    - rf_importance
-    - integrated_ranking
-    - top15
+    Uses the preloaded reference machine-learning results:
+    - model comparison
+    - feature importance
+    - integrated ranking
+    - top biomarkers
     """
 
     model_comparison = data.get("model_comparison")

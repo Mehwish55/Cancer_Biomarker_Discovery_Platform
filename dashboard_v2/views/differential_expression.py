@@ -59,10 +59,10 @@ def show_differential_expression(deg):
     else:
         st.markdown(
             """
-            Explore the differential expression results from the LUAD
+            Explore the differential expression results from the preloaded reference analysis
             tumor-versus-normal RNA-seq analysis.
 
-            This page displays the **V1 pipeline results directly** and does
+            This page displays the **validated reference analysis results directly** and does
             not recalculate differential expression.
             """
         )

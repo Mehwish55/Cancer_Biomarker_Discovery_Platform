@@ -308,11 +308,6 @@ def _show_configuration(expression_df, metadata_df=None):
         ],
     )
 
-    st.info(
-        "OncoNexa will use these settings to select the appropriate "
-        "analysis workflow. The existing LUAD demonstration remains "
-        "separate from user-uploaded analyses."
-    )
 
     ready = (
         len(group_names) >= 2
@@ -502,25 +497,9 @@ def _show_configuration(expression_df, metadata_df=None):
                     "✅ Differential expression analysis completed."
                 )
 
-                st.subheader(
-                    "Differential Expression Results"
-                )
-
-                status = st.session_state[
-                    "onconexa_analysis_status"
-                ]
-
-                for key, value in status.items():
-                    st.write(
-                        f"**{key}:** {value}"
-                    )
-
-                st.dataframe(
-                    st.session_state[
-                        "onconexa_analysis_results"
-                    ],
-                    use_container_width=True,
-                    hide_index=True,
+                st.info(
+                    "Your differential expression results are now available "
+                    "on the Differential Expression page."
                 )
 
             except AnalysisEngineError as exc:

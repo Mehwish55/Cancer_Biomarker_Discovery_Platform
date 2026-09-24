@@ -21,13 +21,13 @@ def generate_grounded_answer(evidence, gene_name, question):
     Deterministic evidence-based assistant.
 
     This is intentionally NOT an LLM.
-    It answers only from retrieved V1 evidence.
+    It answers only from retrieved reference evidence.
     """
 
     if not evidence:
         return (
             f"I could not find sufficient evidence for {gene_name} "
-            "in the available V1 datasets."
+            "in the available reference datasets."
         )
 
     integrated = evidence.get("integrated_ranking", {})
@@ -54,7 +54,7 @@ def generate_grounded_answer(evidence, gene_name, question):
 ### Evidence summary for {gene_name}
 
 **{gene_name}** is supported by multiple independent evidence
-components in the existing V1 pipeline.
+components in the validated reference pipeline.
 
 - **Validation rank:** {top15.get("validation_rank", "N/A")}
 - **Validation status:** {top15.get("validation_status", "N/A")}
@@ -67,7 +67,7 @@ components in the existing V1 pipeline.
 - **log₂ fold change:** {_fmt(de.get("log2FoldChange"))}
 - **Adjusted p-value:** {_fmt(de.get("padj"), 6)}
 
-The V1 pipeline therefore provides evidence from differential
+The validated reference pipeline therefore provides evidence from differential
 expression, independent validation, ROC performance, machine
 learning, and stability.
 
@@ -96,9 +96,9 @@ validation.
 - **Sensitivity:** {_fmt(roc.get("sensitivity"))}
 - **Specificity:** {_fmt(roc.get("specificity"))}
 
-These values come directly from the V1 ROC/validation output.
+These values come directly from the validated reference ROC/validation output.
 
-No new ROC calculation is performed by V2.
+No new ROC calculation is performed by the reference analysis.
 """.strip()
 
     # --------------------------------------------------------
@@ -112,9 +112,9 @@ No new ROC calculation is performed by V2.
 - **ML rank:** {ml.get("ML_rank", "N/A")}
 - **Feature importance:** {_fmt(ml.get("importance"))}
 
-These values come directly from the V1 machine-learning output.
+These values come directly from the validated reference machine-learning output.
 
-V2 does not retrain the model or modify the ML ranking.
+The reference analysis does not retrain the model or modify the existing ML ranking.
 """.strip()
 
     # --------------------------------------------------------
@@ -126,7 +126,7 @@ V2 does not retrain the model or modify the ML ranking.
 
 ### Stability evidence for {gene_name}
 
-The V1 biomarker stability analysis provides several measures of
+The validated reference biomarker stability analysis provides several measures of
 how consistently this biomarker was selected across machine-learning
 validation folds.
 
@@ -141,9 +141,9 @@ validation folds.
 - **Normalized Random-Forest score:** {_fmt(stability.get("normalized_rf"), 4)}
 - **Normalized permutation score:** {_fmt(stability.get("normalized_permutation"), 4)}
 
-These values come directly from the V1 biomarker stability analysis.
+These values come directly from the validated reference biomarker stability analysis.
 
-V2 does not recalculate or modify the stability metrics.
+The reference analysis does not recalculate or modify the existing stability metrics.
 """.strip()
 
     # --------------------------------------------------------
@@ -164,7 +164,7 @@ V2 does not recalculate or modify the stability metrics.
 - **p-value:** {_fmt(de.get("pvalue"), 6)}
 - **Adjusted p-value:** {_fmt(de.get("padj"), 6)}
 
-These values come directly from the V1 differential-expression
+These values come directly from the reference differential-expression
 results.
 """.strip()
 
@@ -175,7 +175,7 @@ results.
     return f"""
 ### Evidence available for {gene_name}
 
-I found evidence for this biomarker in the V1-derived datasets.
+I found evidence for this biomarker in the reference-derived datasets.
 
 The available evidence includes:
 
@@ -689,10 +689,10 @@ def show_ai_assistant(data):
     st.markdown(
         """
         Ask questions about the computational evidence supporting
-        individual LUAD biomarker candidates.
+        individual biomarker candidates.
 
         **Important:** This assistant is grounded in the existing
-        V1 pipeline outputs. It does not recalculate biological
+        reference pipeline outputs. It does not recalculate biological
         results or invent evidence.
         """
     )
@@ -808,7 +808,7 @@ def show_ai_assistant(data):
         st.subheader("🔒 AI Grounding")
 
         st.success(
-            "Answer generated only from the retrieved V1 biomarker evidence."
+            "Answer generated only from the retrieved reference biomarker evidence."
         )
 
         with st.expander("📚 Evidence sources used"):
