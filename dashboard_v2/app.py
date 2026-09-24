@@ -451,7 +451,7 @@ elif section == "🏠 Overview":
         }
 
         .onco-eyebrow {
-            font-size: 0.82rem;
+            font-size: 1.25rem;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
@@ -460,7 +460,7 @@ elif section == "🏠 Overview":
         }
 
         .onco-hero-title {
-            font-size: 2.65rem;
+            font-size: 2.35rem;
             font-weight: 800;
             line-height: 1.12;
             margin-bottom: 14px;
@@ -506,6 +506,19 @@ elif section == "🏠 Overview":
             text-transform: uppercase;
             opacity: 0.6;
             margin-bottom: 5px;
+        }
+
+        div.stButton:has(button[kind="secondary"]) button {
+            border: 1px solid #1976d2;
+            background-color: #1976d2;
+            color: white;
+            font-weight: 700;
+        }
+
+        div.stButton:has(button[kind="secondary"]) button:hover {
+            border-color: #1565c0;
+            background-color: #1565c0;
+            color: white;
         }
 
         .onco-cta {
