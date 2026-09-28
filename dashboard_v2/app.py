@@ -360,6 +360,21 @@ kegg = data.get("kegg")
 
 
 # ==================================================
+# NAVIGATION STATE
+# ==================================================
+
+if "navigation_request" not in st.session_state:
+    st.session_state["navigation_request"] = None
+
+if "nav_radio" not in st.session_state:
+    st.session_state["nav_radio"] = "🏠 Overview"
+
+if st.session_state["navigation_request"] is not None:
+    st.session_state["nav_radio"] = st.session_state["navigation_request"]
+    st.session_state["navigation_request"] = None
+
+
+# ==================================================
 # SIDEBAR
 # ==================================================
 
@@ -385,6 +400,7 @@ section = st.sidebar.radio(
         "📥 Downloads",
         "💼 Pricing & Services",
     ],
+    key="nav_radio",
 )
 
 
@@ -452,10 +468,11 @@ elif section == "🏠 Overview":
 
         .onco-eyebrow {
             font-size: 1.25rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            opacity: 0.65;
+            opacity: 1;
+            color: #ffffff;
             margin-bottom: 10px;
         }
 
@@ -467,10 +484,11 @@ elif section == "🏠 Overview":
         }
 
         .onco-hero-text {
-            font-size: 1.08rem;
-            line-height: 1.6;
+            font-size: 0.92rem;
+            line-height: 1.5;
             max-width: 850px;
-            opacity: 0.78;
+            color: #d0d0d0;
+            opacity: 1;
             margin-bottom: 8px;
         }
 
@@ -489,22 +507,25 @@ elif section == "🏠 Overview":
 
         .onco-feature-title {
             font-size: 1.05rem;
-            font-weight: 750;
+            font-weight: 800;
+            color: #ffffff;
             margin-bottom: 8px;
         }
 
         .onco-feature-text {
-            font-size: 0.88rem;
+            font-size: 0.92rem;
             line-height: 1.5;
-            opacity: 0.72;
+            color: #d0d0d0;
+            opacity: 1;
         }
 
         .onco-section-label {
             font-size: 0.78rem;
-            font-weight: 750;
+            font-weight: 800;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            opacity: 0.6;
+            opacity: 1;
+            color: #ffffff;
             margin-bottom: 5px;
         }
 
@@ -531,14 +552,16 @@ elif section == "🏠 Overview":
 
         .onco-cta-title {
             font-size: 1.35rem;
-            font-weight: 750;
+            font-weight: 800;
+            color: #ffffff;
             margin-bottom: 8px;
         }
 
         .onco-cta-text {
             font-size: 0.92rem;
-            line-height: 1.55;
-            opacity: 0.75;
+            line-height: 1.5;
+            color: #d0d0d0;
+            opacity: 1;
         }
 
         .module-card {
@@ -550,14 +573,41 @@ elif section == "🏠 Overview":
         }
 
         .module-title {
-            font-weight: 700;
+            font-weight: 800;
+            color: #ffffff;
             margin-bottom: 7px;
         }
 
         .module-description {
-            font-size: 0.84rem;
-            line-height: 1.45;
-            opacity: 0.7;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            color: #d0d0d0;
+            opacity: 1;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # --------------------------------------------------
+    # BLUE FRONT-PAGE CTA BUTTONS
+    # --------------------------------------------------
+
+    st.markdown(
+        """
+        <style>
+        div[data-testid="stButton"] button {
+            background-color: #2563eb !important;
+            color: white !important;
+            border: 1px solid #2563eb !important;
+            font-weight: 700 !important;
+            border-radius: 8px !important;
+        }
+
+        div[data-testid="stButton"] button:hover {
+            background-color: #1d4ed8 !important;
+            border-color: #1d4ed8 !important;
+            color: white !important;
         }
         </style>
         """,
@@ -585,7 +635,7 @@ elif section == "🏠 Overview":
             use_container_width=True,
             key="overview_new_analysis",
         ):
-            st.session_state["section"] = "🚀 New Analysis"
+            st.session_state["navigation_request"] = "🚀 New Analysis"
             st.rerun()
 
     with cta2:
@@ -594,7 +644,7 @@ elif section == "🏠 Overview":
             use_container_width=True,
             key="overview_reference_analysis",
         ):
-            st.session_state["section"] = "🏠 Overview"
+            st.session_state["navigation_request"] = "🏠 Overview"
             st.rerun()
 
     st.divider()
@@ -798,7 +848,7 @@ elif section == "🏠 Overview":
         use_container_width=True,
         key="overview_new_analysis_bottom",
     ):
-        st.session_state["section"] = "🚀 New Analysis"
+        st.session_state["navigation_request"] = "🚀 New Analysis"
         st.rerun()
 
     st.caption(

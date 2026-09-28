@@ -47,97 +47,225 @@ def show_pricing():
 
     st.subheader("🔬 Research Analysis Services")
 
-    col1, col2, col3 = st.columns(3)
+    st.markdown(
+        """
+        <style>
+        /* ==============================================
+           PRICING SERVICE TYPOGRAPHY
+           ============================================== */
 
-    with col1:
-        with st.container(border=True):
-            st.markdown("## Essential")
-            st.markdown("### €200")
-            st.caption("Initial biomarker discovery")
+        .service-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            line-height: 1.25;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
 
+        .service-price {
+            font-size: 1.15rem;
+            font-weight: 800;
+            line-height: 1.3;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .service-description {
+            font-size: 0.92rem;
+            line-height: 1.5;
+            color: #d0d0d0;
+            opacity: 1;
+        }
+
+        .service-heading {
+            font-size: 0.92rem;
+            font-weight: 800;
+            line-height: 1.4;
+            color: #ffffff;
+            margin-bottom: 7px;
+        }
+
+        .service-features {
+            font-size: 0.92rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #d0d0d0;
+        }
+
+        /* ==============================================
+           BLUE ANALYSIS BUTTONS
+           ============================================== */
+
+        div[data-testid="stButton"] button {
+            background-color: #2563eb !important;
+            color: #ffffff !important;
+            border: 1px solid #2563eb !important;
+            font-weight: 700 !important;
+            border-radius: 8px !important;
+            min-height: 46px !important;
+        }
+
+        div[data-testid="stButton"] button:hover {
+            background-color: #1d4ed8 !important;
+            border-color: #1d4ed8 !important;
+            color: #ffffff !important;
+        }
+
+div[data-testid="stFormSubmitButton"] button {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    border: 1px solid #2563eb !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+    min-height: 46px !important;
+}
+
+div[data-testid="stFormSubmitButton"] button:hover {
+    background-color: #1d4ed8 !important;
+    border-color: #1d4ed8 !important;
+    color: #ffffff !important;
+}
+
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # ==================================================
+        # SERVICE TABLE
+    # Each service uses the same five-column structure for consistent alignment.
+
+    # ESSENTIAL
+    with st.container(border=True):
+        col1, col2, col3, col4, col5 = st.columns(
+            [0.55, 1.35, 1.15, 3.25, 1.45],
+            gap="medium",
+        )
+
+        with col1:
             st.markdown(
-                """
-                **Includes**
-                - Differential expression
-                - Biomarker candidate discovery
-                - Basic ROC/AUC analysis
-                - Pathway analysis
-                - Results tables
-                - Summary report
-                """
-            )
-
-            st.markdown(
-                '<div style="height: 24px;"></div>',
+                "<div style='font-size:1.45rem; padding-top:6px;'>🧪</div>",
                 unsafe_allow_html=True,
             )
 
+        with col2:
+            st.markdown(
+                '<div class="service-title">Essential</div>',
+                unsafe_allow_html=True,
+            )
+
+        with col3:
+            st.markdown(
+                '<div class="service-price">€200</div>',
+                unsafe_allow_html=True,
+            )
+
+        with col4:
+            st.markdown(
+                '<div class="service-description">'
+                '<strong>Initial biomarker discovery</strong><br>'
+                'Differential expression · Biomarker discovery · '
+                'ROC/AUC · Pathway analysis · Results tables · Summary report'
+                '</div>',
+                unsafe_allow_html=True,
+            )
+
+        with col5:
             if st.button(
-                "Request Essential Analysis",
+                "Request Essential",
                 key="pricing_essential",
-                use_container_width=True,
+                width="stretch",
             ):
                 st.session_state["pricing_request"] = "Essential"
 
-    with col2:
-        with st.container(border=True):
-            st.markdown("## ⭐ Advanced")
-            st.markdown("### €500")
-            st.caption("Complete biomarker discovery & validation")
 
-            st.markdown(
-                """
-                **Includes everything in Essential, plus**
-                - ROC/AUC validation
-                - Machine learning
-                - Stability analysis
-                - Evidence integration
-                - Integrated biomarker ranking
-                - Professional PDF report
-                """
-            )
+    # ADVANCED
+    with st.container(border=True):
+        col1, col2, col3, col4, col5 = st.columns(
+            [0.55, 1.35, 1.15, 3.25, 1.45],
+            gap="medium",
+        )
 
+        with col1:
             st.markdown(
-                '<div style="height: 24px;"></div>',
+                "<div style='font-size:1.45rem; padding-top:6px;'>⭐</div>",
                 unsafe_allow_html=True,
             )
 
+        with col2:
+            st.markdown(
+                '<div class="service-title">Advanced</div>',
+                unsafe_allow_html=True,
+            )
+
+        with col3:
+            st.markdown(
+                '<div class="service-price">€500</div>',
+                unsafe_allow_html=True,
+            )
+
+        with col4:
+            st.markdown(
+                '<div class="service-description">'
+                '<strong>Complete discovery &amp; validation</strong><br>'
+                'ROC/AUC validation · Machine learning · Stability analysis · '
+                'Evidence integration · Biomarker ranking · Professional PDF report'
+                '</div>',
+                unsafe_allow_html=True,
+            )
+
+        with col5:
             if st.button(
-                "Request Advanced Analysis",
+                "Request Advanced",
                 key="pricing_advanced",
-                use_container_width=True,
+                width="stretch",
             ):
                 st.session_state["pricing_request"] = "Advanced"
 
-    with col3:
-        with st.container(border=True):
-            st.markdown("## 🧬 Custom Research")
-            st.markdown("### From €1,000")
-            st.caption("Complex or customized projects")
 
-            st.markdown(
-                """
-                **Suitable for**
-                - Large datasets
-                - Multiple comparisons
-                - Custom workflows
-                - Additional validation
-                - Research-specific analysis
-                - Customized reporting
-                """
-            )
+    # CUSTOM RESEARCH
+    with st.container(border=True):
+        col1, col2, col3, col4, col5 = st.columns(
+            [0.55, 1.35, 1.15, 3.25, 1.45],
+            gap="medium",
+        )
 
+        with col1:
             st.markdown(
-                '<div style="height: 24px;"></div>',
+                "<div style='font-size:1.45rem; padding-top:6px;'>🧬</div>",
                 unsafe_allow_html=True,
             )
 
+        with col2:
+            st.markdown(
+                '<div class="service-title">Custom Research</div>',
+                unsafe_allow_html=True,
+            )
+
+        with col3:
+            st.markdown(
+                '<div class="service-price">From €1,000</div>',
+                unsafe_allow_html=True,
+            )
+
+        with col4:
+            st.markdown(
+                '<div class="service-description">'
+                '<strong>Complex or customized projects</strong><br>'
+                'Large datasets · Multiple comparisons · Custom workflows · '
+                'Additional validation · Research-specific analysis · Customized reporting'
+                '</div>',
+                unsafe_allow_html=True,
+            )
+
+        with col5:
             if st.button(
-                "Request Custom Analysis",
+                "Request Custom",
                 key="pricing_custom",
-                use_container_width=True,
+                width="stretch",
             ):
                 st.session_state["pricing_request"] = "Custom Research"
+
 
     if st.session_state.get("pricing_request"):
         st.divider()

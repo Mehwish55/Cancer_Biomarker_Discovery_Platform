@@ -330,6 +330,27 @@ def _show_configuration(expression_df, metadata_df=None):
         "The next stage will run the disease diagnostic biomarker workflow."
     )
 
+    st.markdown(
+        """
+        <style>
+        div[data-testid="stButton"] button[kind="primary"] {
+            background-color: #2563eb !important;
+            color: white !important;
+            border: 1px solid #2563eb !important;
+            font-weight: 700 !important;
+            border-radius: 8px !important;
+        }
+
+        div[data-testid="stButton"] button[kind="primary"]:hover {
+            background-color: #1d4ed8 !important;
+            border-color: #1d4ed8 !important;
+            color: white !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
     run_analysis = st.button(
         "🚀 Run Analysis",
         type="primary",
