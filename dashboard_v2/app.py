@@ -40,10 +40,13 @@ st.markdown(
        ================================================== */
 
     .stApp,
+    .block-container { padding-top: 1.5rem !important; }
+        padding-top: 1.5rem !important;
     [data-testid="stAppViewContainer"],
     [data-testid="stMain"],
     .main,
     .block-container {
+        padding-top: 1.5rem !important;
         background-color: #0B0B0B !important;
         color: #F5F5F5 !important;
     }
