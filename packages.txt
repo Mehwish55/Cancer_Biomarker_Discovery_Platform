@@ -4,3 +4,5 @@ r-bioc-limma
 r-bioc-org.hs.eg.db
 r-bioc-annotationdbi
 r-bioc-go.db
+libblas3
+liblapack3
