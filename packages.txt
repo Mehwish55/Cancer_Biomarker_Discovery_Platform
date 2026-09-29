@@ -1,0 +1,6 @@
+r-base
+r-bioc-deseq2
+r-bioc-limma
+r-bioc-org.hs.eg.db
+r-bioc-annotationdbi
+r-bioc-go.db

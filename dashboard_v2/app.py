@@ -204,6 +204,21 @@ st.markdown(
     }
 
     /* ==================================================
+       SIDEBAR NAVIGATION
+       ================================================== */
+
+    [data-testid="stSidebar"] [role="radiogroup"] label {
+        display: flex !important;
+        align-items: center !important;
+        min-height: 36px !important;
+    }
+
+    [data-testid="stSidebar"] [role="radiogroup"] label p {
+        margin: 0 !important;
+        line-height: 1.3 !important;
+    }
+
+    /* ==================================================
        BUTTONS
        ================================================== */
 
