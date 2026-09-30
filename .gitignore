@@ -230,3 +230,11 @@ __pycache__/
 
 # Backup files
 *.empty_backup.csv
+
+# OncoNexa local test/generated data
+customer_results/
+onconexa_public_test/
+
+# Local backup files
+*.save
+dashboard_v2/app_before_*.py
