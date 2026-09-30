@@ -1,6 +1,6 @@
 # 🧬 OncoNexa
 
-## AI-Assisted Pan-Cancer Biomarker Discovery Platform
+## AI-Powered Pan-Cancer Biomarker Discovery Platform
 
 **OncoNexa** is a computational bioinformatics platform designed to support **cancer biomarker discovery, validation, prioritization, and biological interpretation** from gene-expression data.
 
