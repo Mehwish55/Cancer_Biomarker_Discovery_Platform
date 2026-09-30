@@ -238,3 +238,4 @@ onconexa_public_test/
 # Local backup files
 *.save
 dashboard_v2/app_before_*.py
+.streamlit/

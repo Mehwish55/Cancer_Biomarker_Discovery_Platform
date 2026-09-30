@@ -460,16 +460,58 @@ def metric_value(df, column, default=0):
 
 if section == "🚀 New Analysis":
 
-    from views.data_upload import show_data_upload
-
     st.title("🚀 New Analysis")
 
-    st.info(
-        "🧪 Testing mode: this professional analysis workflow is "
-        "temporarily open for platform testing."
+    st.warning(
+        "🔒 Customer analysis is available by request."
     )
 
-    show_data_upload()
+    st.markdown(
+        """
+        ### Analyze Your Own Data with OncoNexa
+
+        The OncoNexa computational analysis workflow is currently
+        available through our **request-based analysis service**.
+
+        You can request an analysis by providing your project details,
+        dataset information, and research objectives.
+        """
+    )
+
+    st.markdown(
+        """
+        <style>
+        div[data-testid="stButton"] button[kind="primary"] {
+            background-color: #2563EB !important;
+            border-color: #2563EB !important;
+            color: #FFFFFF !important;
+            font-weight: 700 !important;
+        }
+
+        div[data-testid="stButton"] button[kind="primary"]:hover {
+            background-color: #1D4ED8 !important;
+            border-color: #1D4ED8 !important;
+            color: #FFFFFF !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    if st.button(
+        "📩 Request an Analysis",
+        key="locked_analysis_request",
+        use_container_width=True,
+        type="primary",
+    ):
+        st.session_state["navigation_request"] = "💼 Pricing & Services"
+        st.rerun()
+
+    st.caption(
+        "The public demonstration remains available for exploring "
+        "the platform and its biomarker discovery workflow."
+    )
+
 
 elif section == "🏠 Overview":
 

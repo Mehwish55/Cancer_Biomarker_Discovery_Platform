@@ -1,4 +1,60 @@
 import streamlit as st
+import resend
+
+
+def send_analysis_request(
+    selected_package,
+    name,
+    organization,
+    email,
+    data_type,
+    dataset_size,
+    cancer_type,
+    project_description,
+):
+    api_key = st.secrets["RESEND_API_KEY"]
+    recipient = st.secrets["ONCONEXA_REQUEST_EMAIL"]
+
+    resend.api_key = api_key
+
+    params = {
+        "from": "OncoNexa <onboarding@resend.dev>",
+        "to": [recipient],
+        "subject": f"OncoNexa Analysis Request — {selected_package}",
+        "reply_to": email,
+        "text": f"""
+New OncoNexa analysis request
+
+Package:
+{selected_package}
+
+Name:
+{name}
+
+Organization:
+{organization or "Not provided"}
+
+Customer email:
+{email}
+
+Data type:
+{data_type}
+
+Dataset size:
+{dataset_size or "Not provided"}
+
+Cancer / disease area:
+{cancer_type or "Not provided"}
+
+Project description:
+{project_description}
+
+Please review this request and contact the customer at:
+{email}
+""",
+    }
+
+    return resend.Emails.send(params)
 
 
 def show_pricing():
@@ -330,13 +386,33 @@ div[data-testid="stFormSubmitButton"] button:hover {
                     "Please complete all required fields marked with *."
                 )
             else:
-                st.success(
-                    f"Your {selected_package} inquiry has been submitted successfully."
-                )
-                st.info(
-                    "Thank you. Your project requirements have been captured "
-                    "for review of the appropriate OncoNexa analysis workflow."
-                )
+                try:
+                    send_analysis_request(
+                        selected_package=selected_package,
+                        name=name,
+                        organization=organization,
+                        email=email,
+                        data_type=data_type,
+                        dataset_size=dataset_size,
+                        cancer_type=cancer_type,
+                        project_description=project_description,
+                    )
+
+                    st.success(
+                        "Your analysis request has been submitted successfully."
+                    )
+                    st.info(
+                        "Thank you. We will review your requirements and "
+                        "contact you by email regarding the appropriate "
+                        "OncoNexa analysis workflow."
+                    )
+
+                except Exception as e:
+                    st.error(
+                        "We could not submit your request at this time. "
+                        "Please try again later."
+                    )
+                    st.caption(f"Technical details: {e}")
 
     st.divider()
 
