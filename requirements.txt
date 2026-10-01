@@ -6,3 +6,4 @@ PyYAML
 scikit-learn==1.9.1
 reportlab==5.0.1
 scipy==1.18.1
+resend
